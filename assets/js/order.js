@@ -1,242 +1,203 @@
 // ============================================
-// ONLINE ORDERING SYSTEM JAVASCRIPT
+// HYFUN FOODS - MODERN ORDERING SYSTEM (FIXED)
 // ============================================
 
-// Global Variables
+// Global State
 let currentUser = null;
 let cart = JSON.parse(localStorage.getItem('hyfun_cart')) || [];
 let likedProducts = JSON.parse(localStorage.getItem('hyfun_liked')) || [];
 let currentSection = 'hero';
 let currentOrder = null;
 let userRating = 0;
+let products = [];
 
 // Initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
     initOrderSystem();
-    updateCartCount();
     loadProducts();
+    updateCartCount();
     checkAuthStatus();
+    initAnimations();
     
-    console.log('HyFun Foods Ordering System Loaded!');
+    console.log('HyFun Foods Modern Ordering System Loaded!');
 });
-
-// Generate unique order ID
-function generateOrderId() {
-    const timestamp = Date.now().toString(36);
-    const random = Math.random().toString(36).substr(2, 6).toUpperCase();
-    const uniqueId = Math.floor(Math.random() * 1000000).toString().padStart(6, '0');
-    return `HYFUN-${uniqueId}-${timestamp}-${random}`;
-}
 
 // Initialize all functionality
 function initOrderSystem() {
-    // Vertical progress indicator clicks
-    document.querySelectorAll('.vertical-progress-indicator .progress-step').forEach(step => {
-        step.addEventListener('click', function() {
-            const stepNum = this.getAttribute('data-step');
-            const sections = ['auth', 'products', 'details', 'payment', 'tracking', 'review'];
-            if (stepNum > 0 && stepNum <= sections.length) {
-                loadSection(sections[stepNum - 1]);
-            }
+    // Progress steps click
+    document.querySelectorAll('.progress-step').forEach((step, index) => {
+        step.addEventListener('click', () => {
+            const sections = ['hero', 'auth', 'products', 'details', 'payment', 'tracking', 'review'];
+            loadSection(sections[index]);
         });
     });
     
-    // Start Ordering Button - auto redirect to login
-    document.getElementById('startOrderBtn').addEventListener('click', function() {
+    // Start Order Button
+    document.getElementById('startOrderBtn').addEventListener('click', () => {
         loadSection('auth');
     });
     
     // Auth Tabs
-    document.querySelectorAll('.auth-tab').forEach(tab => {
-        tab.addEventListener('click', function() {
-            const tabName = this.getAttribute('data-tab');
-            
-            // Update active tab
-            document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
-            this.classList.add('active');
-            
-            // Show corresponding form
-            document.querySelectorAll('.auth-form').forEach(form => {
-                form.classList.remove('active');
-            });
-            document.getElementById(tabName + 'Form').classList.add('active');
-        });
-    });
-    
-    // Login Form Submission - auto redirect to menu
-    document.getElementById('loginFormContent').addEventListener('submit', function(e) {
-        e.preventDefault();
-        const email = document.getElementById('loginEmail').value;
-        const password = document.getElementById('loginPassword').value;
-        
-        if (validateLogin(email, password)) {
-            showLoading();
-            setTimeout(() => {
-                loginUser(email);
-                hideLoading();
-                loadSection('products'); // Auto redirect
-            }, 1500);
-        }
-    });
-    
-    // Signup Form Submission - auto redirect to menu
-    document.getElementById('signupFormContent').addEventListener('submit', function(e) {
-        e.preventDefault();
-        const name = document.getElementById('signupName').value;
-        const email = document.getElementById('signupEmail').value;
-        const phone = document.getElementById('signupPhone').value;
-        const password = document.getElementById('signupPassword').value;
-        const confirmPassword = document.getElementById('confirmPassword').value;
-        
-        if (validateSignup(name, email, phone, password, confirmPassword)) {
-            showLoading();
-            setTimeout(() => {
-                registerUser(name, email, phone);
-                hideLoading();
-                loadSection('products'); // Auto redirect
-            }, 1500);
-        }
-    });
-    
-    // Google Login Button
-    document.querySelector('.btn-google').addEventListener('click', function() {
-        showLoading();
-        setTimeout(() => {
-            currentUser = {
-                name: "Google User",
-                email: "user@gmail.com",
-                phone: "9876543210"
-            };
-            
-            localStorage.setItem('hyfun_user', JSON.stringify(currentUser));
-            updateUserInfo();
-            
-            hideLoading();
-            showNotification('Logged in with Google!', 'success');
-            loadSection('products'); // Auto redirect
-        }, 1500);
-    });
-    
-    // Filter Buttons
-    document.querySelectorAll('.filter-btn').forEach(btn => {
+    document.querySelectorAll('.auth-tab-btn').forEach(btn => {
         btn.addEventListener('click', function() {
-            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            const tab = this.getAttribute('data-tab');
+            
+            document.querySelectorAll('.auth-tab-btn').forEach(b => b.classList.remove('active'));
             this.classList.add('active');
             
-            const filter = this.getAttribute('data-filter');
-            filterProductsByType(filter);
+            document.querySelectorAll('.auth-form-container').forEach(f => f.classList.remove('active'));
+            document.getElementById(tab + 'FormContainer').classList.add('active');
         });
     });
     
-    // Category Tabs
-    document.querySelectorAll('.category-tab').forEach(tab => {
-        tab.addEventListener('click', function() {
-            const category = this.getAttribute('data-category');
-            
-            // Update active tab
-            document.querySelectorAll('.category-tab').forEach(t => t.classList.remove('active'));
-            this.classList.add('active');
-            
-            // Filter products
-            filterProducts(category);
+    // Login Form
+    document.getElementById('loginForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        handleLogin();
+    });
+    
+    // Signup Form
+    document.getElementById('signupForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        handleSignup();
+    });
+    
+    // Password Toggle
+    document.querySelectorAll('.password-toggle').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const input = this.previousElementSibling;
+            const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
+            input.setAttribute('type', type);
+            this.querySelector('i').classList.toggle('fa-eye');
+            this.querySelector('i').classList.toggle('fa-eye-slash');
+        });
+    });
+    
+    // Social Login
+    document.querySelectorAll('.social-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            if (this.classList.contains('google')) {
+                handleGoogleLogin();
+            } else if (this.classList.contains('facebook')) {
+                handleFacebookLogin();
+            }
         });
     });
     
     // Search Products
-    document.getElementById('searchProducts').addEventListener('input', function() {
-        searchProducts(this.value);
+    document.getElementById('searchProducts').addEventListener('input', debounce(function(e) {
+        searchProducts(e.target.value);
+    }, 300));
+    
+    // Filter Button
+    document.getElementById('filterBtn').addEventListener('click', function() {
+        document.getElementById('filterMenu').classList.toggle('active');
+    });
+    
+    // Filter Options
+    document.querySelectorAll('.filter-option').forEach(option => {
+        option.addEventListener('click', function() {
+            const filter = this.getAttribute('data-filter');
+            filterProductsByType(filter);
+            document.getElementById('filterMenu').classList.remove('active');
+        });
+    });
+    
+    // Category Chips
+    document.querySelectorAll('.category-chip').forEach(chip => {
+        chip.addEventListener('click', function() {
+            document.querySelectorAll('.category-chip').forEach(c => c.classList.remove('active'));
+            this.classList.add('active');
+            
+            const category = this.getAttribute('data-category');
+            filterProducts(category);
+        });
     });
     
     // Cart Toggle
     document.getElementById('cartToggle').addEventListener('click', toggleCart);
     document.getElementById('closeCart').addEventListener('click', toggleCart);
     
-    // Customer Details Form - auto redirect to payment
-    document.getElementById('customerForm').addEventListener('submit', function(e) {
+    // Delivery Form
+    document.getElementById('deliveryForm').addEventListener('submit', (e) => {
         e.preventDefault();
-        if (validateCustomerDetails()) {
-            loadSection('payment'); // Auto redirect
+        if (validateDeliveryForm()) {
+            loadSection('payment');
         }
     });
     
     // Payment Method Selection
-    document.querySelectorAll('.payment-option').forEach(option => {
-        option.addEventListener('click', function() {
-            const method = this.getAttribute('data-method');
+    document.querySelectorAll('.method-card').forEach(method => {
+        method.addEventListener('click', function() {
+            const methodType = this.getAttribute('data-method');
             
-            // Update active option
-            document.querySelectorAll('.payment-option').forEach(o => o.classList.remove('active'));
+            document.querySelectorAll('.method-card').forEach(m => m.classList.remove('active'));
             this.classList.add('active');
             
-            // Show corresponding form
-            document.querySelectorAll('.payment-form').forEach(form => {
-                form.classList.remove('active');
-            });
-            document.getElementById(method + 'Form').classList.add('active');
+            document.querySelectorAll('.payment-form-container').forEach(f => f.classList.remove('active'));
+            document.getElementById(methodType + 'PaymentForm').classList.add('active');
         });
     });
     
     // UPI App Selection
-    document.querySelectorAll('.upi-app').forEach(app => {
+    document.querySelectorAll('.upi-app-card').forEach(app => {
         app.addEventListener('click', function() {
-            document.querySelectorAll('.upi-app').forEach(a => a.classList.remove('active'));
+            document.querySelectorAll('.upi-app-card').forEach(a => a.classList.remove('active'));
             this.classList.add('active');
             
-            const appName = this.querySelector('span').textContent;
-            document.getElementById('upiId').value = `user@${appName.toLowerCase().replace(/\s+/g, '')}`;
+            const appName = this.getAttribute('data-app');
+            document.getElementById('upiId').value = `user@${appName}`;
         });
     });
     
-    // Process Payment - auto redirect to tracking
-    document.getElementById('processPayment').addEventListener('click', processPayment);
+    // Process Payment
+    document.getElementById('processPaymentBtn').addEventListener('click', processPayment);
     
-    // Checkout Button - auto redirect to details
-    document.getElementById('checkoutBtn').addEventListener('click', function() {
+    // Checkout Button
+    document.getElementById('checkoutBtn').addEventListener('click', () => {
         if (cart.length > 0) {
-            loadSection('details'); // Auto redirect
+            loadSection('details');
+            toggleCart();
         }
     });
     
-    // Back to Section Buttons
-    document.querySelectorAll('.btn-back-section').forEach(btn => {
-        btn.addEventListener('click', function() {
-            const section = this.getAttribute('data-back-to');
-            loadSection(section);
-        });
-    });
+    // Track Order Button
+    document.getElementById('trackOrderBtn').addEventListener('click', startOrderTracking);
     
-    // Print Bill
-    document.getElementById('printBill').addEventListener('click', printBill);
-    
-    // Share Bill
-    document.getElementById('shareBill').addEventListener('click', shareBill);
-    
-    // Track Order
-    document.getElementById('trackOrder').addEventListener('click', function() {
-        document.getElementById('orderSuccess').style.display = 'none';
-        document.getElementById('trackingProgress').style.display = 'block';
-        startOrderTracking();
-    });
+    // Print Receipt Button
+    document.getElementById('printReceiptBtn').addEventListener('click', printReceipt);
     
     // Rating Stars
-    document.querySelectorAll('.rating-stars i').forEach(star => {
+    document.querySelectorAll('.rating-stars-enhanced i').forEach(star => {
         star.addEventListener('click', function() {
             userRating = parseInt(this.getAttribute('data-rating'));
             updateRatingStars(userRating);
+            updateRatingCircle(userRating);
+            updateRatingMessage(userRating);
         });
         
         star.addEventListener('mouseover', function() {
             const rating = parseInt(this.getAttribute('data-rating'));
-            updateRatingStars(rating, false);
+            highlightStars(rating);
         });
         
-        star.addEventListener('mouseout', function() {
-            updateRatingStars(userRating);
+        star.addEventListener('mouseout', () => {
+            highlightStars(userRating);
+        });
+    });
+    
+    // Feedback Tags
+    document.querySelectorAll('.feedback-tag').forEach(tag => {
+        tag.addEventListener('click', function() {
+            this.classList.toggle('active');
+            const tagText = this.textContent.trim();
+            const reviewText = document.getElementById('reviewText');
+            reviewText.value += (reviewText.value ? ' ' : '') + tagText;
         });
     });
     
     // Review Form
-    document.getElementById('reviewForm').addEventListener('submit', function(e) {
+    document.getElementById('reviewForm').addEventListener('submit', (e) => {
         e.preventDefault();
         submitReview();
     });
@@ -244,149 +205,141 @@ function initOrderSystem() {
     // Modal Close
     document.getElementById('closeModal').addEventListener('click', closeModal);
     
-    // Click outside modal to close
-    document.getElementById('productModal').addEventListener('click', function(e) {
-        if (e.target === this) {
+    // Click outside modal
+    document.getElementById('productModal').addEventListener('click', (e) => {
+        if (e.target === document.getElementById('productModal')) {
             closeModal();
         }
     });
     
-    // Browse Button in Empty Cart
-    document.querySelector('.btn-browse').addEventListener('click', function() {
-        loadSection('products');
-        toggleCart();
-    });
-    
-    // Order Again Button
-    document.querySelectorAll('.btn-action[onclick*="products"]').forEach(btn => {
-        btn.addEventListener('click', function() {
-            loadSection('products');
-        });
-    });
-    
-    // Rate & Review Button
-    document.querySelectorAll('.btn-action[onclick*="review"]').forEach(btn => {
-        btn.addEventListener('click', function() {
-            loadSection('review');
-        });
+    // Close filter menu on outside click
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('.filter-dropdown')) {
+            document.getElementById('filterMenu')?.classList.remove('active');
+        }
     });
 }
 
-// Load Products Data
+// Initialize animations
+function initAnimations() {
+    // Animate progress bar on scroll
+    window.addEventListener('scroll', () => {
+        const scrollPercent = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+        document.getElementById('progressFill').style.width = scrollPercent + '%';
+    });
+}
+
+// Load Products
 function loadProducts() {
-    const products = [
+    products = [
         // French Fries
-        { id: 1, name: "French Fries", category: "french-fries", price: 199, image: "french_fries.png", desc: "Classic straight-cut fries with perfect crispiness", tag: "Best Seller", weight: "500g" },
-        { id: 2, name: "XLF Fries", category: "french-fries", price: 249, image: "XLF Fries.png", desc: "Extra long fries for that premium restaurant feel", tag: "Extra Long", weight: "500g" },
-        { id: 3, name: "Crinkle Fries", category: "french-fries", price: 179, image: "Crinkle fries.png", desc: "Fun crinkle-cut shape holds more seasoning", tag: "Crinkle Cut", weight: "500g" },
-        { id: 4, name: "Skin on Fries", category: "french-fries", price: 189, image: "Skin on Fries.png", desc: "Fries with skin for extra nutrients and rustic taste", tag: "Natural", weight: "500g" },
-        { id: 5, name: "Flavory Fries", category: "french-fries", price: 219, image: "Flavory Fries.png", desc: "Pre-seasoned fries with delicious flavors", tag: "Seasoned", weight: "500g" },
+        { id: 1, name: "Classic French Fries", category: "french-fries", price: 199, image: "french_fries.png", desc: "Perfectly crispy golden fries", tag: "Best Seller", weight: "500g", popular: true },
+        { id: 2, name: "XLF Fries", category: "french-fries", price: 249, image: "XLF Fries.png", desc: "Extra long premium fries", tag: "Premium", weight: "500g", popular: true },
+        { id: 3, name: "Crinkle Cut Fries", category: "french-fries", price: 179, image: "Crinkle fries.png", desc: "Fun crinkle-cut style", tag: "Classic", weight: "500g" },
+        { id: 4, name: "Skin On Fries", category: "french-fries", price: 189, image: "Skin on Fries.png", desc: "Rustic fries with skin", tag: "Natural", weight: "500g" },
+        { id: 5, name: "Flavory Fries", category: "french-fries", price: 219, image: "Flavory Fries.png", desc: "Pre-seasoned delicious fries", tag: "Seasoned", weight: "500g" },
         
         // Potato Specialties
-        { id: 6, name: "Potato Wedges", category: "potato-specialties", price: 229, image: "Potato Wedges.png", desc: "Thick-cut wedges with skin, perfect for dipping", tag: "Classic", weight: "500g" },
-        { id: 7, name: "Classic Wedges", category: "potato-specialties", price: 209, image: "Classic Wedges.png", desc: "Traditional potato wedges with perfect seasoning", tag: "Classic", weight: "500g" },
-        { id: 8, name: "Lime 'n' Mint Wedges", category: "potato-specialties", price: 239, image: "Lime 'n' Mint Wedges.png", desc: "Refreshing wedges with lime and mint flavor", tag: "Zesty", weight: "500g" },
-        { id: 9, name: "Spicy Wedges", category: "potato-specialties", price: 219, image: "Spicy Wedges.png", desc: "Wedges with a bold spicy kick", tag: "Spicy", weight: "500g" },
-        { id: 10, name: "Hash Brown Round", category: "potato-specialties", price: 189, image: "Hash Brown Round.png", desc: "Round-shaped crispy hash browns", tag: "Breakfast", weight: "300g" },
-        { id: 11, name: "Hash Brown Triangle", category: "potato-specialties", price: 199, image: "Hash Brown Triangle.png", desc: "Classic triangle-shaped hash browns", tag: "Classic", weight: "300g" },
+        { id: 6, name: "Potato Wedges", category: "potato-specialties", price: 229, image: "Potato Wedges.png", desc: "Thick-cut seasoned wedges", tag: "Classic", weight: "500g", popular: true },
+        { id: 7, name: "Classic Wedges", category: "potato-specialties", price: 209, image: "Classic Wedges.png", desc: "Traditional potato wedges", tag: "Classic", weight: "500g" },
+        { id: 8, name: "Lime 'n' Mint Wedges", category: "potato-specialties", price: 239, image: "Lime 'n' Mint Wedges.png", desc: "Zesty lime and mint flavor", tag: "Zesty", weight: "500g" },
+        { id: 9, name: "Spicy Wedges", category: "potato-specialties", price: 219, image: "Spicy Wedges.png", desc: "Bold spicy kick", tag: "Spicy", weight: "500g" },
+        { id: 10, name: "Hash Brown Round", category: "potato-specialties", price: 189, image: "Hash Brown Round.png", desc: "Round crispy hash browns", tag: "Breakfast", weight: "300g" },
+        { id: 11, name: "Hash Brown Triangle", category: "potato-specialties", price: 199, image: "Hash Brown Triangle.png", desc: "Classic triangle hash browns", tag: "Classic", weight: "300g" },
         { id: 12, name: "Tater Shotz", category: "potato-specialties", price: 179, image: "Tater Shotz.png", desc: "Bite-sized potato nuggets", tag: "Bite-sized", weight: "400g" },
-        { id: 13, name: "Potatobets", category: "potato-specialties", price: 159, image: "PotatoBets-1.png", desc: "Crunchy potato bets with seasoning", tag: "New", weight: "400g" },
-        { id: 14, name: "Chilli Garlic Poppers", category: "potato-specialties", price: 199, image: "Chilli Garlic Poppers.png", desc: "Spicy garlic flavored potato poppers", tag: "Spicy", weight: "350g" },
+        { id: 13, name: "Potatobets", category: "potato-specialties", price: 159, image: "PotatoBets-1.png", desc: "Crunchy potato bites", tag: "New", weight: "400g" },
+        { id: 14, name: "Chilli Garlic Poppers", category: "potato-specialties", price: 199, image: "Chilli Garlic Poppers.png", desc: "Spicy garlic poppers", tag: "Spicy", weight: "350g" },
         
         // Veggie Specialties
-        { id: 15, name: "Jalapeño Cheesy Pops", category: "veggie-specialties", price: 259, image: "Jalapeño Cheesy Pops.png", desc: "Spicy jalapeño and cheese bites", tag: "Spicy", weight: "300g" },
+        { id: 15, name: "Jalapeño Cheesy Pops", category: "veggie-specialties", price: 259, image: "Jalapeño Cheesy Pops.png", desc: "Spicy jalapeño cheese bites", tag: "Spicy", weight: "300g", popular: true },
         { id: 16, name: "Veggie Stix", category: "veggie-specialties", price: 189, image: "Veggie Stix.png", desc: "Crispy vegetable sticks", tag: "Crunchy", weight: "400g" },
-        { id: 17, name: "Cheesy Paneer Patty", category: "veggie-specialties", price: 279, image: "Cheesy Paneer Patty.png", desc: "Paneer and cheese filled patty", tag: "Cheese", weight: "250g" },
-        { id: 18, name: "Veg Burger Patty", category: "veggie-specialties", price: 229, image: "Veg Burger Patty.png", desc: "Perfect patty for vegetarian burgers", tag: "Burger", weight: "250g" },
-        { id: 19, name: "Mozzarella Cheese Stix", category: "veggie-specialties", price: 299, image: "Mozarella-Cheese-Stix.png", desc: "Breaded mozzarella cheese sticks", tag: "Cheesy", weight: "300g" },
+        { id: 17, name: "Cheesy Paneer Patty", category: "veggie-specialties", price: 279, image: "Cheesy Paneer Patty.png", desc: "Paneer cheese filled patty", tag: "Cheese", weight: "250g" },
+        { id: 18, name: "Veg Burger Patty", category: "veggie-specialties", price: 229, image: "Veg Burger Patty.png", desc: "Perfect veg burger patty", tag: "Burger", weight: "250g" },
+        { id: 19, name: "Mozzarella Cheese Stix", category: "veggie-specialties", price: 299, image: "Mozarella-Cheese-Stix.png", desc: "Breaded mozzarella sticks", tag: "Cheesy", weight: "300g" },
         
         // Indian Ethnic
-        { id: 20, name: "Aloo Tikki", category: "indian-ethnic", price: 179, image: "Aloo_Tikki.png", desc: "Classic Indian potato patties with spices", tag: "Traditional", weight: "400g" },
-        { id: 21, name: "Sabudana Patty", category: "indian-ethnic", price: 199, image: "Sabudana-Patty.png", desc: "Sago and potato patties for fasting", tag: "Festive", weight: "350g" },
+        { id: 20, name: "Aloo Tikki", category: "indian-ethnic", price: 179, image: "Aloo_Tikki.png", desc: "Classic Indian potato patties", tag: "Traditional", weight: "400g", popular: true },
+        { id: 21, name: "Sabudana Patty", category: "indian-ethnic", price: 199, image: "Sabudana-Patty.png", desc: "Sago potato patties", tag: "Festive", weight: "350g" },
         { id: 22, name: "Mumbai Aloo Vada", category: "indian-ethnic", price: 189, image: "Mumbai Aloo Vada.png", desc: "Mumbai-style potato vada", tag: "Street Food", weight: "400g" },
-        { id: 23, name: "Hara Bhara Kebab", category: "indian-ethnic", price: 219, image: "Hara-Bhara-Kebab.png", desc: "Spinach and potato kebabs", tag: "Green", weight: "350g" },
+        { id: 23, name: "Hara Bhara Kebab", category: "indian-ethnic", price: 219, image: "Hara-Bhara-Kebab.png", desc: "Spinach potato kebabs", tag: "Green", weight: "350g" },
         
         // Baked Snacks
-        { id: 24, name: "Margherita Pizza", category: "baked-snacks", price: 249, image: "Margherita Pizza.png", desc: "Classic margherita pizza pockets", tag: "Pizza", weight: "400g" },
-        { id: 25, name: "Veg Paradise Pizza", category: "baked-snacks", price: 269, image: "Veg Paradise Pizza.png", desc: "Mixed vegetable pizza pockets", tag: "Pizza", weight: "400g" },
-        { id: 26, name: "Tandoori Paneer Pizza", category: "baked-snacks", price: 299, image: "Tandoori Paneer Pizza.png", desc: "Tandoori spiced paneer pizza", tag: "Pizza", weight: "400g" },
-        { id: 27, name: "Mexicano Puffets", category: "baked-snacks", price: 189, image: "Mexicano Puffets.png", desc: "Mexican style seasoned puffs", tag: "Mexican", weight: "350g" },
-        { id: 28, name: "Italiano Puffets", category: "baked-snacks", price: 189, image: "Italiano Puffets.png", desc: "Italian herb and cheese puffs", tag: "Italian", weight: "350g" },
-        { id: 29, name: "Schezwan Puffets", category: "baked-snacks", price: 199, image: "Schezwan Puffets.png", desc: "Spicy Schezwan sauce filled puffs", tag: "Spicy", weight: "350g" },
-        { id: 30, name: "Apple Pie", category: "baked-snacks", price: 179, image: "Apple Pie.png", desc: "Sweet apple filled pastry", tag: "Dessert", weight: "300g" },
-        { id: 31, name: "Mango Peach Pie", category: "baked-snacks", price: 189, image: "Mango – Peach Pie.png", desc: "Tropical mango and peach pie", tag: "Dessert", weight: "300g" }
+        { id: 24, name: "Margherita Pizza", category: "baked-snacks", price: 249, image: "Margherita Pizza.png", desc: "Classic pizza pockets", tag: "Pizza", weight: "400g" },
+        { id: 25, name: "Veg Paradise Pizza", category: "baked-snacks", price: 269, image: "Veg Paradise Pizza.png", desc: "Mixed veg pizza pockets", tag: "Pizza", weight: "400g" },
+        { id: 26, name: "Tandoori Paneer Pizza", category: "baked-snacks", price: 299, image: "Tandoori Paneer Pizza.png", desc: "Tandoori paneer pizza", tag: "Pizza", weight: "400g" },
+        { id: 27, name: "Mexicano Puffets", category: "baked-snacks", price: 189, image: "Mexicano Puffets.png", desc: "Mexican seasoned puffs", tag: "Mexican", weight: "350g" },
+        { id: 28, name: "Italiano Puffets", category: "baked-snacks", price: 189, image: "Italiano Puffets.png", desc: "Italian herb puffs", tag: "Italian", weight: "350g" },
+        { id: 29, name: "Schezwan Puffets", category: "baked-snacks", price: 199, image: "Schezwan Puffets.png", desc: "Spicy Schezwan puffs", tag: "Spicy", weight: "350g" },
+        { id: 30, name: "Apple Pie", category: "baked-snacks", price: 179, image: "Apple Pie.png", desc: "Sweet apple pastry", tag: "Dessert", weight: "300g" },
+        { id: 31, name: "Mango Peach Pie", category: "baked-snacks", price: 189, image: "Mango – Peach Pie.png", desc: "Tropical fruit pie", tag: "Dessert", weight: "300g" }
     ];
     
-    // Store products globally
-    window.hyfunProducts = products;
-    
-    // Render products
     renderProducts(products);
 }
 
-// Render Products Grid
-function renderProducts(products) {
+// Render Products
+function renderProducts(productsToRender) {
     const grid = document.getElementById('productsGrid');
     grid.innerHTML = '';
     
-    products.forEach(product => {
+    productsToRender.forEach(product => {
         const isLiked = likedProducts.includes(product.id);
         const isBestSeller = product.tag === "Best Seller";
         
-        const productCard = document.createElement('div');
-        productCard.className = 'product-card';
-        productCard.setAttribute('data-id', product.id);
-        productCard.setAttribute('data-category', product.category);
+        const card = document.createElement('div');
+        card.className = 'product-card-modern';
+        card.setAttribute('data-id', product.id);
         
-        productCard.innerHTML = `
-            <div class="product-image">
-                <img src="./assets/image/${product.image}" alt="${product.name}" class="product-img">
-                <div class="product-badge">${product.tag}</div>
-                <button class="product-like ${isLiked ? 'liked' : ''}" data-id="${product.id}">
+        card.innerHTML = `
+            <div class="product-image-wrapper">
+                <img src="./assets/image/${product.image}" alt="${product.name}">
+                ${isBestSeller ? '<div class="product-badge-modern">Best Seller</div>' : ''}
+                <div class="product-like-modern ${isLiked ? 'liked' : ''}" data-id="${product.id}">
                     <i class="fas fa-heart"></i>
-                </button>
-                ${isBestSeller ? '<div class="best-seller-label"><i class="fas fa-crown"></i> Best Seller</div>' : ''}
-            </div>
-            <div class="product-info">
-                <h3 class="product-title">${product.name}</h3>
-                <p class="product-desc">${product.desc}</p>
-                <div class="product-meta">
-                    <div class="product-price">${product.price}</div>
-                    <div class="product-tag">${product.weight}</div>
                 </div>
-                <div class="product-actions">
-                    <div class="quantity-control">
-                        <button class="quantity-btn minus" data-id="${product.id}">-</button>
-                        <span class="quantity-value" id="qty-${product.id}">1</span>
-                        <button class="quantity-btn plus" data-id="${product.id}">+</button>
+            </div>
+            <div class="product-info-modern">
+                <h3 class="product-name">${product.name}</h3>
+                <p class="product-desc-modern">${product.desc}</p>
+                <div class="product-meta-modern">
+                    <span class="product-price-modern">₹${product.price}</span>
+                    <span class="product-weight">${product.weight}</span>
+                </div>
+                <div class="product-actions-modern">
+                    <div class="quantity-control-modern">
+                        <button class="qty-btn minus" data-id="${product.id}">-</button>
+                        <span class="qty-value" id="qty-${product.id}">1</span>
+                        <button class="qty-btn plus" data-id="${product.id}">+</button>
                     </div>
-                    <button class="btn-add-cart" data-id="${product.id}">
-                        <i class="fas fa-cart-plus"></i> Add to Cart
+                    <button class="add-to-cart-btn" data-id="${product.id}">
+                        <i class="fas fa-cart-plus"></i> Add
                     </button>
                 </div>
             </div>
         `;
         
-        grid.appendChild(productCard);
+        grid.appendChild(card);
     });
     
     // Add event listeners to new elements
     addProductEventListeners();
 }
 
-// Add Event Listeners to Product Elements
+// Add product event listeners
 function addProductEventListeners() {
     // Like buttons
-    document.querySelectorAll('.product-like').forEach(btn => {
-        btn.addEventListener('click', function() {
+    document.querySelectorAll('.product-like-modern').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.stopPropagation();
             const productId = parseInt(this.getAttribute('data-id'));
             toggleLike(productId, this);
         });
     });
     
     // Quantity buttons
-    document.querySelectorAll('.quantity-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
+    document.querySelectorAll('.qty-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.stopPropagation();
             const productId = parseInt(this.getAttribute('data-id'));
             const isMinus = this.classList.contains('minus');
             updateQuantity(productId, isMinus);
@@ -394,19 +347,20 @@ function addProductEventListeners() {
     });
     
     // Add to cart buttons
-    document.querySelectorAll('.btn-add-cart').forEach(btn => {
-        btn.addEventListener('click', function() {
+    document.querySelectorAll('.add-to-cart-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.stopPropagation();
             const productId = parseInt(this.getAttribute('data-id'));
             addToCart(productId);
         });
     });
     
     // Product card click for modal
-    document.querySelectorAll('.product-card').forEach(card => {
+    document.querySelectorAll('.product-card-modern').forEach(card => {
         card.addEventListener('click', function(e) {
-            if (!e.target.closest('.product-like') && 
-                !e.target.closest('.quantity-btn') && 
-                !e.target.closest('.btn-add-cart')) {
+            if (!e.target.closest('.product-like-modern') && 
+                !e.target.closest('.qty-btn') && 
+                !e.target.closest('.add-to-cart-btn')) {
                 const productId = parseInt(this.getAttribute('data-id'));
                 showProductModal(productId);
             }
@@ -414,59 +368,58 @@ function addProductEventListeners() {
     });
 }
 
-// Filter Products by Category
+// Filter products by category
 function filterProducts(category) {
-    let filteredProducts = window.hyfunProducts;
-    
+    let filtered = products;
     if (category !== 'all') {
-        filteredProducts = window.hyfunProducts.filter(p => p.category === category);
+        filtered = products.filter(p => p.category === category);
     }
-    
-    renderProducts(filteredProducts);
+    renderProducts(filtered);
 }
 
-// Filter Products by Type
+// Filter products by type
 function filterProductsByType(filter) {
-    let filteredProducts = window.hyfunProducts;
+    let filtered = products;
     
     switch(filter) {
         case 'popular':
-            filteredProducts = window.hyfunProducts.filter(p => 
-                p.tag === "Best Seller" || p.name.includes("Fries") || p.name.includes("Wedges")
-            );
+            filtered = products.filter(p => p.popular);
             break;
         case 'veg':
-            filteredProducts = window.hyfunProducts.filter(p => 
+            filtered = products.filter(p => 
                 p.category === 'veggie-specialties' || p.category === 'indian-ethnic'
             );
             break;
+        case 'new':
+            filtered = products.filter(p => p.tag === 'New');
+            break;
         case 'all':
         default:
-            // Show all products
+            // Show all
             break;
     }
     
-    renderProducts(filteredProducts);
+    renderProducts(filtered);
 }
 
-// Search Products
+// Search products
 function searchProducts(query) {
     if (!query.trim()) {
-        renderProducts(window.hyfunProducts);
+        renderProducts(products);
         return;
     }
     
     const searchTerm = query.toLowerCase();
-    const filteredProducts = window.hyfunProducts.filter(p => 
+    const filtered = products.filter(p => 
         p.name.toLowerCase().includes(searchTerm) || 
         p.desc.toLowerCase().includes(searchTerm) ||
         p.tag.toLowerCase().includes(searchTerm)
     );
     
-    renderProducts(filteredProducts);
+    renderProducts(filtered);
 }
 
-// Toggle Like/Unlike
+// Toggle like
 function toggleLike(productId, button) {
     const index = likedProducts.indexOf(productId);
     
@@ -483,7 +436,7 @@ function toggleLike(productId, button) {
     localStorage.setItem('hyfun_liked', JSON.stringify(likedProducts));
 }
 
-// Update Quantity
+// Update quantity
 function updateQuantity(productId, isMinus) {
     const qtyElement = document.getElementById(`qty-${productId}`);
     let currentQty = parseInt(qtyElement.textContent);
@@ -497,12 +450,11 @@ function updateQuantity(productId, isMinus) {
     qtyElement.textContent = currentQty;
 }
 
-// Add to Cart
+// Add to cart
 function addToCart(productId) {
-    const product = window.hyfunProducts.find(p => p.id === productId);
+    const product = products.find(p => p.id === productId);
     const quantity = parseInt(document.getElementById(`qty-${productId}`).textContent);
     
-    // Check if product already in cart
     const existingItem = cart.find(item => item.id === productId);
     
     if (existingItem) {
@@ -518,50 +470,44 @@ function addToCart(productId) {
         });
     }
     
-    // Update cart in localStorage
     localStorage.setItem('hyfun_cart', JSON.stringify(cart));
-    
-    // Update UI
     updateCartCount();
     renderCartItems();
     
-    // Show notification
     showNotification(`${quantity}x ${product.name} added to cart!`, 'success');
     
-    // Open cart sidebar
-    toggleCart(true);
+    // Animate cart button
+    const cartBtn = document.querySelector('.cart-btn');
+    cartBtn.classList.add('pulse');
+    setTimeout(() => cartBtn.classList.remove('pulse'), 500);
 }
 
-// Toggle Cart Sidebar
-function toggleCart(forceOpen = false) {
-    const cartSidebar = document.getElementById('cartSidebar');
+// Update cart count
+function updateCartCount() {
+    const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+    document.getElementById('cartCount').textContent = totalItems;
     
-    if (forceOpen) {
-        cartSidebar.classList.add('active');
-    } else {
-        cartSidebar.classList.toggle('active');
-    }
-    
-    // Update cart items when opened
-    if (cartSidebar.classList.contains('active')) {
-        renderCartItems();
-    }
-}
-
-// Render Cart Items
-function renderCartItems() {
-    const cartItems = document.getElementById('cartItems');
-    const cartEmpty = document.getElementById('cartEmpty');
+    // Update checkout button state
     const checkoutBtn = document.getElementById('checkoutBtn');
+    if (checkoutBtn) {
+        checkoutBtn.disabled = cart.length === 0;
+    }
+}
+
+// Render cart items
+function renderCartItems() {
+    const cartList = document.getElementById('cartItemsList');
+    const emptyCart = document.getElementById('emptyCart');
+    const sidebarTotal = document.getElementById('sidebarTotal');
     
     if (cart.length === 0) {
-        cartEmpty.style.display = 'block';
-        cartItems.innerHTML = '';
-        checkoutBtn.disabled = true;
+        emptyCart.style.display = 'block';
+        cartList.innerHTML = '';
+        sidebarTotal.textContent = '₹0';
         return;
     }
     
-    cartEmpty.style.display = 'none';
+    emptyCart.style.display = 'none';
     
     let itemsHTML = '';
     let total = 0;
@@ -571,20 +517,18 @@ function renderCartItems() {
         total += itemTotal;
         
         itemsHTML += `
-            <div class="cart-item">
+            <div class="cart-item-modern">
                 <div class="cart-item-image">
                     <img src="./assets/image/${item.image}" alt="${item.name}">
                 </div>
                 <div class="cart-item-info">
                     <h4 class="cart-item-title">${item.name}</h4>
-                    <div class="cart-item-price">₹${item.price} × ${item.quantity} = ₹${itemTotal}</div>
+                    <div class="cart-item-price">₹${item.price} × ${item.quantity}</div>
                     <div class="cart-item-controls">
-                        <div class="quantity-control">
-                            <button class="quantity-btn minus" data-cart-index="${index}">-</button>
-                            <span class="quantity-value">${item.quantity}</span>
-                            <button class="quantity-btn plus" data-cart-index="${index}">+</button>
-                        </div>
-                        <button class="cart-item-remove" data-cart-index="${index}">
+                        <button class="cart-qty-btn minus" data-index="${index}">-</button>
+                        <span class="cart-qty-value">${item.quantity}</span>
+                        <button class="cart-qty-btn plus" data-index="${index}">+</button>
+                        <button class="cart-item-remove" data-index="${index}">
                             <i class="fas fa-trash"></i>
                         </button>
                     </div>
@@ -593,14 +537,13 @@ function renderCartItems() {
         `;
     });
     
-    cartItems.innerHTML = itemsHTML;
-    document.getElementById('cartTotal').textContent = `₹${total}`;
-    checkoutBtn.disabled = false;
+    cartList.innerHTML = itemsHTML;
+    sidebarTotal.textContent = `₹${total}`;
     
-    // Add event listeners to cart controls
-    document.querySelectorAll('.cart-item .quantity-btn').forEach(btn => {
+    // Add cart item event listeners
+    document.querySelectorAll('.cart-qty-btn').forEach(btn => {
         btn.addEventListener('click', function() {
-            const index = parseInt(this.getAttribute('data-cart-index'));
+            const index = parseInt(this.getAttribute('data-index'));
             const isMinus = this.classList.contains('minus');
             updateCartQuantity(index, isMinus);
         });
@@ -608,13 +551,13 @@ function renderCartItems() {
     
     document.querySelectorAll('.cart-item-remove').forEach(btn => {
         btn.addEventListener('click', function() {
-            const index = parseInt(this.getAttribute('data-cart-index'));
+            const index = parseInt(this.getAttribute('data-index'));
             removeFromCart(index);
         });
     });
 }
 
-// Update Cart Quantity
+// Update cart quantity
 function updateCartQuantity(index, isMinus) {
     if (isMinus && cart[index].quantity > 1) {
         cart[index].quantity--;
@@ -627,7 +570,7 @@ function updateCartQuantity(index, isMinus) {
     updateCartCount();
 }
 
-// Remove from Cart
+// Remove from cart
 function removeFromCart(index) {
     const itemName = cart[index].name;
     cart.splice(index, 1);
@@ -639,57 +582,52 @@ function removeFromCart(index) {
     showNotification(`${itemName} removed from cart`, 'info');
 }
 
-// Update Cart Count
-function updateCartCount() {
-    const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-    document.querySelector('.cart-count').textContent = totalItems;
+// Toggle cart sidebar
+function toggleCart() {
+    document.getElementById('cartSidebar').classList.toggle('active');
 }
 
-// Show Product Modal
+// Show product modal
 function showProductModal(productId) {
-    const product = window.hyfunProducts.find(p => p.id === productId);
+    const product = products.find(p => p.id === productId);
     const modal = document.getElementById('productModal');
     const content = document.getElementById('modalProductContent');
     
     const isLiked = likedProducts.includes(productId);
     
     content.innerHTML = `
-        <div class="product-modal-content">
-            <div class="modal-product-image">
-                <img src="./assets/image/${product.image}" alt="${product.name}">
+        <div class="product-modal-content" style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; padding: 30px;">
+            <div style="border-radius: 16px; overflow: hidden;">
+                <img src="./assets/image/${product.image}" alt="${product.name}" style="width: 100%; height: auto;">
             </div>
-            <div class="modal-product-info">
-                <h2>${product.name}</h2>
-                <div class="modal-product-price">₹${product.price}</div>
-                <p class="modal-product-desc">${product.desc}</p>
+            <div>
+                <h2 style="font-size: 2rem; margin-bottom: 15px;">${product.name}</h2>
+                <div style="font-size: 2rem; color: var(--green); font-weight: 700; margin-bottom: 20px;">₹${product.price}</div>
+                <p style="color: var(--text-muted); line-height: 1.6; margin-bottom: 25px;">${product.desc}</p>
                 
-                <div class="modal-product-details">
-                    <div class="detail-item">
-                        <i class="fas fa-weight"></i>
+                <div style="background: var(--bg-main); padding: 20px; border-radius: 16px; margin-bottom: 25px;">
+                    <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 12px;">
+                        <i class="fas fa-weight" style="color: var(--green);"></i>
                         <span>Weight: ${product.weight}</span>
                     </div>
-                    <div class="detail-item">
-                        <i class="fas fa-clock"></i>
+                    <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 12px;">
+                        <i class="fas fa-clock" style="color: var(--green);"></i>
                         <span>Prep Time: 3-5 minutes</span>
                     </div>
-                    <div class="detail-item">
-                        <i class="fas fa-leaf"></i>
+                    <div style="display: flex; align-items: center; gap: 15px;">
+                        <i class="fas fa-leaf" style="color: var(--green);"></i>
                         <span>100% Vegetarian</span>
-                    </div>
-                    <div class="detail-item">
-                        <i class="fas fa-prescription-bottle"></i>
-                        <span>No Preservatives</span>
                     </div>
                 </div>
                 
-                <div class="modal-product-actions">
-                    <div class="modal-quantity">
-                        <button class="quantity-btn minus" data-modal-id="${productId}">-</button>
-                        <span class="quantity-value" id="modal-qty-${productId}">1</span>
-                        <button class="quantity-btn plus" data-modal-id="${productId}">+</button>
+                <div style="display: flex; gap: 15px; align-items: center;">
+                    <div class="quantity-control-modern" style="background: var(--bg-main);">
+                        <button class="qty-btn minus" data-modal-id="${productId}" style="background: white;">-</button>
+                        <span class="qty-value" id="modal-qty-${productId}">1</span>
+                        <button class="qty-btn plus" data-modal-id="${productId}" style="background: white;">+</button>
                     </div>
-                    <button class="btn-modal-add" data-modal-id="${productId}">
-                        <i class="fas fa-cart-plus"></i> Add to Cart - ₹${product.price}
+                    <button class="add-to-cart-btn" data-modal-id="${productId}" style="flex: 1;">
+                        <i class="fas fa-cart-plus"></i> Add to Cart
                     </button>
                 </div>
             </div>
@@ -699,22 +637,22 @@ function showProductModal(productId) {
     modal.classList.add('active');
     
     // Add modal event listeners
-    document.querySelectorAll('.modal-quantity .quantity-btn').forEach(btn => {
+    document.querySelectorAll('[data-modal-id]').forEach(btn => {
         btn.addEventListener('click', function() {
             const id = parseInt(this.getAttribute('data-modal-id'));
-            const isMinus = this.classList.contains('minus');
-            updateModalQuantity(id, isMinus);
+            
+            if (this.classList.contains('qty-btn')) {
+                const isMinus = this.classList.contains('minus');
+                updateModalQuantity(id, isMinus);
+            } else if (this.classList.contains('add-to-cart-btn')) {
+                const quantity = parseInt(document.getElementById(`modal-qty-${id}`).textContent);
+                addToCartWithQuantity(id, quantity);
+            }
         });
-    });
-    
-    document.querySelector('.btn-modal-add').addEventListener('click', function() {
-        const id = parseInt(this.getAttribute('data-modal-id'));
-        const quantity = parseInt(document.getElementById(`modal-qty-${id}`).textContent);
-        addToCartWithQuantity(id, quantity);
     });
 }
 
-// Update Modal Quantity
+// Update modal quantity
 function updateModalQuantity(productId, isMinus) {
     const qtyElement = document.getElementById(`modal-qty-${productId}`);
     let currentQty = parseInt(qtyElement.textContent);
@@ -726,20 +664,12 @@ function updateModalQuantity(productId, isMinus) {
     }
     
     qtyElement.textContent = currentQty;
-    
-    // Update price in button
-    const product = window.hyfunProducts.find(p => p.id === productId);
-    const totalPrice = product.price * currentQty;
-    document.querySelector('.btn-modal-add').innerHTML = `
-        <i class="fas fa-cart-plus"></i> Add to Cart - ₹${totalPrice}
-    `;
 }
 
-// Add to Cart with Specific Quantity
+// Add to cart with specific quantity
 function addToCartWithQuantity(productId, quantity) {
-    const product = window.hyfunProducts.find(p => p.id === productId);
+    const product = products.find(p => p.id === productId);
     
-    // Check if product already in cart
     const existingItem = cart.find(item => item.id === productId);
     
     if (existingItem) {
@@ -763,76 +693,28 @@ function addToCartWithQuantity(productId, quantity) {
     closeModal();
 }
 
-// Close Modal
+// Close modal
 function closeModal() {
     document.getElementById('productModal').classList.remove('active');
 }
 
-// Validate Login
-function validateLogin(email, password) {
-    if (!email.trim()) {
-        showNotification('Please enter email or phone number', 'error');
-        return false;
-    }
+// Handle login
+function handleLogin() {
+    const email = document.getElementById('loginEmail').value;
+    const password = document.getElementById('loginPassword').value;
     
-    if (!password.trim()) {
-        showNotification('Please enter password', 'error');
-        return false;
-    }
-    
-    if (password.length < 6) {
-        showNotification('Password must be at least 6 characters', 'error');
-        return false;
-    }
-    
-    return true;
-}
-
-// Validate Signup
-function validateSignup(name, email, phone, password, confirmPassword) {
-    if (!name.trim()) {
-        showNotification('Please enter your name', 'error');
-        return false;
-    }
-    
-    if (!email.trim()) {
-        showNotification('Please enter email address', 'error');
-        return false;
-    }
-    
-    if (!/^\S+@\S+\.\S+$/.test(email)) {
-        showNotification('Please enter a valid email address', 'error');
-        return false;
-    }
-    
-    if (!phone.trim()) {
-        showNotification('Please enter phone number', 'error');
-        return false;
-    }
-    
-    if (!/^\d{10}$/.test(phone)) {
-        showNotification('Please enter a valid 10-digit phone number', 'error');
-        return false;
+    if (!email || !password) {
+        showNotification('Please fill all fields', 'error');
+        return;
     }
     
     if (password.length < 6) {
         showNotification('Password must be at least 6 characters', 'error');
-        return false;
+        return;
     }
     
-    if (password !== confirmPassword) {
-        showNotification('Passwords do not match', 'error');
-        return false;
-    }
-    
-    return true;
-}
-
-// Login User
-function loginUser(email) {
     showLoading();
     
-    // Simulate API call
     setTimeout(() => {
         currentUser = {
             name: email.split('@')[0],
@@ -845,15 +727,45 @@ function loginUser(email) {
         
         hideLoading();
         showNotification('Login successful!', 'success');
-        // Auto redirect to products is handled in event listener
+        loadSection('products');
     }, 1500);
 }
 
-// Register User
-function registerUser(name, email, phone) {
+// Handle signup
+function handleSignup() {
+    const name = document.getElementById('signupName').value;
+    const email = document.getElementById('signupEmail').value;
+    const phone = document.getElementById('signupPhone').value;
+    const password = document.getElementById('signupPassword').value;
+    const confirmPassword = document.getElementById('confirmPassword').value;
+    
+    if (!name || !email || !phone || !password || !confirmPassword) {
+        showNotification('Please fill all fields', 'error');
+        return;
+    }
+    
+    if (!/^\S+@\S+\.\S+$/.test(email)) {
+        showNotification('Please enter a valid email', 'error');
+        return;
+    }
+    
+    if (!/^\d{10}$/.test(phone)) {
+        showNotification('Please enter a valid 10-digit phone number', 'error');
+        return;
+    }
+    
+    if (password.length < 6) {
+        showNotification('Password must be at least 6 characters', 'error');
+        return;
+    }
+    
+    if (password !== confirmPassword) {
+        showNotification('Passwords do not match', 'error');
+        return;
+    }
+    
     showLoading();
     
-    // Simulate API call
     setTimeout(() => {
         currentUser = {
             name: name,
@@ -866,127 +778,120 @@ function registerUser(name, email, phone) {
         
         hideLoading();
         showNotification('Account created successfully!', 'success');
-        // Auto redirect to products is handled in event listener
+        loadSection('products');
     }, 1500);
 }
 
-// Check Auth Status
+// Handle Google login
+function handleGoogleLogin() {
+    showLoading();
+    
+    setTimeout(() => {
+        currentUser = {
+            name: "Google User",
+            email: "user@gmail.com",
+            phone: "9876543210"
+        };
+        
+        localStorage.setItem('hyfun_user', JSON.stringify(currentUser));
+        updateUserInfo();
+        
+        hideLoading();
+        showNotification('Logged in with Google!', 'success');
+        loadSection('products');
+    }, 1500);
+}
+
+// Handle Facebook login
+function handleFacebookLogin() {
+    showNotification('Facebook login coming soon!', 'info');
+}
+
+// Check auth status
 function checkAuthStatus() {
     const savedUser = localStorage.getItem('hyfun_user');
     
     if (savedUser) {
         currentUser = JSON.parse(savedUser);
         updateUserInfo();
-    }
-}
-
-// Update User Info Display
-function updateUserInfo() {
-    const userInfo = document.getElementById('userInfo');
-    
-    if (currentUser) {
-        userInfo.innerHTML = `
-            <i class="fas fa-user"></i>
-            <span>${currentUser.name}</span>
-        `;
         
-        // Pre-fill customer details if available
+        // Pre-fill forms
         if (document.getElementById('fullName')) {
-            document.getElementById('fullName').value = currentUser.name;
-            document.getElementById('email').value = currentUser.email;
-            document.getElementById('phoneNumber').value = currentUser.phone;
+            document.getElementById('fullName').value = currentUser.name || '';
+            document.getElementById('email').value = currentUser.email || '';
+            document.getElementById('phoneNumber').value = currentUser.phone || '';
         }
     }
 }
 
-// Load Section
-function loadSection(sectionName) {
-    // Hide all sections
-    document.querySelectorAll('.order-section').forEach(section => {
-        section.classList.remove('active');
-    });
+// Update user info
+function updateUserInfo() {
+    const userNameEl = document.getElementById('userName');
     
-    // Show target section
-    const targetSection = document.getElementById(`section-${sectionName}`);
-    targetSection.classList.add('active');
-    currentSection = sectionName;
-    
-    // Update vertical progress indicator
-    updateVerticalProgress(sectionName);
-    
-    // Smooth scroll to section
-    setTimeout(() => {
-        targetSection.scrollIntoView({ 
-            behavior: 'smooth',
-            block: 'start'
-        });
-    }, 100);
-    
-    // Special handling for each section
-    switch(sectionName) {
-        case 'auth':
-            // Auto-focus on first input
-            setTimeout(() => {
-                const firstInput = targetSection.querySelector('input');
-                if (firstInput) firstInput.focus();
-            }, 500);
-            break;
-        case 'products':
-            renderProducts(window.hyfunProducts);
-            break;
-        case 'payment':
-            updatePaymentSummary();
-            break;
-        case 'tracking':
-            showOrderSuccess();
-            break;
+    if (currentUser) {
+        userNameEl.textContent = currentUser.name.split(' ')[0];
     }
 }
 
-// Update Vertical Progress Indicator
-function updateVerticalProgress(sectionName) {
-    const steps = {
-        'hero': 0,
-        'auth': 1,
-        'products': 2,
-        'details': 3,
-        'payment': 4,
-        'tracking': 5,
-        'review': 6
-    };
+// Load section
+function loadSection(sectionName) {
+    document.querySelectorAll('.content-section').forEach(section => {
+        section.classList.remove('active');
+    });
     
-    const currentStep = steps[sectionName] || 0;
+    document.getElementById(`section-${sectionName}`).classList.add('active');
+    currentSection = sectionName;
     
-    document.querySelectorAll('.vertical-progress-indicator .progress-step').forEach((step, index) => {
-        if (index <= currentStep) {
+    // Update progress steps
+    const sections = ['hero', 'auth', 'products', 'details', 'payment', 'tracking', 'review'];
+    const currentIndex = sections.indexOf(sectionName);
+    
+    document.querySelectorAll('.progress-step').forEach((step, index) => {
+        if (index <= currentIndex) {
             step.classList.add('active');
         } else {
             step.classList.remove('active');
         }
     });
+    
+    // Special handling
+    switch(sectionName) {
+        case 'payment':
+            updatePaymentSummary();
+            break;
+        case 'tracking':
+            generateOrderId();
+            break;
+    }
+    
+    // Smooth scroll
+    setTimeout(() => {
+        document.getElementById(`section-${sectionName}`).scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+        });
+    }, 100);
 }
 
-// Validate Customer Details
-function validateCustomerDetails() {
+// Validate delivery form
+function validateDeliveryForm() {
     const requiredFields = ['fullName', 'phoneNumber', 'email', 'address', 'city', 'pincode'];
     
     for (const fieldId of requiredFields) {
         const field = document.getElementById(fieldId);
         if (!field.value.trim()) {
-            showNotification(`Please fill in ${field.previousElementSibling.textContent}`, 'error');
+            showNotification(`Please fill in ${fieldId}`, 'error');
             field.focus();
             return false;
         }
     }
     
-    // Validate email
     const email = document.getElementById('email').value;
     if (!/^\S+@\S+\.\S+$/.test(email)) {
-        showNotification('Please enter a valid email address', 'error');
+        showNotification('Please enter a valid email', 'error');
         return false;
     }
     
-    // Validate phone
     const phone = document.getElementById('phoneNumber').value;
     if (!/^\d{10}$/.test(phone)) {
         showNotification('Please enter a valid 10-digit phone number', 'error');
@@ -996,38 +901,40 @@ function validateCustomerDetails() {
     return true;
 }
 
-// Update Payment Summary
+// Update payment summary
 function updatePaymentSummary() {
-    const summaryContainer = document.getElementById('paymentSummary');
-    const subtotalElement = document.getElementById('subtotal');
-    const taxElement = document.getElementById('taxAmount');
-    const totalElement = document.getElementById('totalAmount');
+    const summaryItems = document.getElementById('paymentSummaryItems');
+    const subtotalEl = document.getElementById('subtotal');
+    const taxEl = document.getElementById('taxAmount');
+    const totalEl = document.getElementById('totalAmount');
+    const payAmountEl = document.getElementById('payAmount');
     
     if (cart.length === 0) {
-        summaryContainer.innerHTML = '<p class="text-center">Cart is empty</p>';
-        subtotalElement.textContent = '₹0';
-        taxElement.textContent = '₹0';
-        totalElement.textContent = '₹0';
+        summaryItems.innerHTML = '<p class="text-center">Your cart is empty</p>';
+        subtotalEl.textContent = '₹0';
+        taxEl.textContent = '₹0';
+        totalEl.textContent = '₹0';
+        payAmountEl.textContent = '0';
         return;
     }
     
-    let summaryHTML = '';
+    let itemsHTML = '';
     let subtotal = 0;
     
     cart.forEach(item => {
         const itemTotal = item.price * item.quantity;
         subtotal += itemTotal;
         
-        summaryHTML += `
-            <div class="summary-item">
-                <div class="item-info">
-                    <h4>${item.name}</h4>
-                    <div class="item-meta">
-                        <span>${item.weight}</span>
-                        <span>× ${item.quantity}</span>
-                    </div>
+        itemsHTML += `
+            <div class="summary-item-modern">
+                <div class="item-image">
+                    <img src="./assets/image/${item.image}" alt="${item.name}">
                 </div>
-                <div class="item-price">₹${itemTotal}</div>
+                <div class="item-details">
+                    <h4>${item.name}</h4>
+                    <p>${item.weight} × ${item.quantity}</p>
+                </div>
+                <div class="item-total">₹${itemTotal}</div>
             </div>
         `;
     });
@@ -1036,23 +943,30 @@ function updatePaymentSummary() {
     const tax = subtotal * 0.05;
     const total = subtotal + deliveryFee + tax;
     
-    summaryContainer.innerHTML = summaryHTML;
-    subtotalElement.textContent = `₹${subtotal}`;
-    taxElement.textContent = `₹${tax.toFixed(2)}`;
-    totalElement.textContent = `₹${total.toFixed(2)}`;
+    summaryItems.innerHTML = itemsHTML;
+    subtotalEl.textContent = `₹${subtotal}`;
+    taxEl.textContent = `₹${tax.toFixed(2)}`;
+    totalEl.textContent = `₹${total.toFixed(2)}`;
+    payAmountEl.textContent = total.toFixed(2);
 }
 
-// Process Payment
+// Process payment
 function processPayment() {
     if (cart.length === 0) {
         showNotification('Your cart is empty', 'error');
         return;
     }
     
-    const selectedMethod = document.querySelector('.payment-option.active').getAttribute('data-method');
+    const activeMethod = document.querySelector('.method-card.active');
+    if (!activeMethod) {
+        showNotification('Please select a payment method', 'error');
+        return;
+    }
     
-    // Validate payment method specific fields
-    if (selectedMethod === 'card') {
+    const method = activeMethod.getAttribute('data-method');
+    
+    // Validate payment method
+    if (method === 'card') {
         const cardNumber = document.getElementById('cardNumber').value;
         const expiryDate = document.getElementById('expiryDate').value;
         const cvv = document.getElementById('cvv').value;
@@ -1064,12 +978,11 @@ function processPayment() {
         }
         
         if (!/^\d{16}$/.test(cardNumber.replace(/\s/g, ''))) {
-            showNotification('Please enter a valid 16-digit card number', 'error');
+            showNotification('Please enter a valid card number', 'error');
             return;
         }
-    } else if (selectedMethod === 'upi') {
+    } else if (method === 'upi') {
         const upiId = document.getElementById('upiId').value;
-        
         if (!upiId || !upiId.includes('@')) {
             showNotification('Please enter a valid UPI ID', 'error');
             return;
@@ -1083,26 +996,25 @@ function processPayment() {
         hideLoading();
         
         // Create order
-        createOrder(selectedMethod);
+        createOrder(method);
         
         // Clear cart
         cart = [];
         localStorage.setItem('hyfun_cart', JSON.stringify(cart));
         updateCartCount();
         
-        // Show success
-        loadSection('tracking'); // Auto redirect
+        showNotification('Payment successful!', 'success');
+        loadSection('tracking');
     }, 2000);
 }
 
-// Create Order
+// Create order
 function createOrder(paymentMethod) {
-    const orderId = generateOrderId(); // Use unique ID generator
-    const orderDate = new Date();
+    const orderId = generateOrderId();
     
     currentOrder = {
         id: orderId,
-        date: orderDate.toISOString(),
+        date: new Date().toISOString(),
         items: [...cart],
         customer: {
             name: document.getElementById('fullName').value,
@@ -1120,63 +1032,45 @@ function createOrder(paymentMethod) {
     document.getElementById('orderId').textContent = orderId;
 }
 
-// Show Order Success
-function showOrderSuccess() {
-    document.getElementById('orderSuccess').style.display = 'block';
-    document.getElementById('trackingProgress').style.display = 'none';
+// Generate order ID
+function generateOrderId() {
+    const timestamp = Date.now().toString(36).toUpperCase();
+    const random = Math.random().toString(36).substr(2, 6).toUpperCase();
+    const unique = Math.floor(Math.random() * 1000000).toString().padStart(6, '0');
+    return `HYFUN-${unique}-${timestamp}`;
 }
 
-// Start Order Tracking
+// Start order tracking
 function startOrderTracking() {
     const now = new Date();
     
-    // Update times
     document.getElementById('timeConfirmed').textContent = 'Just now';
-    document.getElementById('timePreparing').textContent = getFormattedTime(now, 5);
-    document.getElementById('timeDelivery').textContent = getFormattedTime(now, 15);
-    document.getElementById('timeDelivered').textContent = getFormattedTime(now, 30);
-    
-    // Start progress animation
-    const routeProgress = document.getElementById('routeProgress');
-    routeProgress.style.width = '0%';
+    document.getElementById('timePreparing').textContent = formatTime(addMinutes(now, 5));
+    document.getElementById('timeDelivery').textContent = formatTime(addMinutes(now, 15));
+    document.getElementById('timeDelivered').textContent = formatTime(addMinutes(now, 30));
     
     // Animate steps
-    const steps = document.querySelectorAll('.tracking-step');
+    const steps = document.querySelectorAll('.timeline-step');
     steps.forEach((step, index) => {
         step.classList.remove('active');
         
         setTimeout(() => {
             step.classList.add('active');
-            
-            // Update route progress
-            const progress = ((index + 1) / steps.length) * 100;
-            routeProgress.style.width = `${progress}%`;
         }, index * 5000);
     });
     
-    // Last step - delivered
-    setTimeout(() => {
-        document.getElementById('timeDelivered').textContent = 'Delivered!';
-        showNotification('Your order has been delivered! Enjoy your meal.', 'success');
-    }, 20000);
+    showNotification('Order tracking started!', 'success');
 }
 
-// Get Formatted Time
-function getFormattedTime(startTime, minutesToAdd) {
-    const time = new Date(startTime.getTime() + minutesToAdd * 60000);
-    return time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-}
-
-// Print Bill
-function printBill() {
-    const printWindow = window.open('', '_blank');
-    
-    const order = currentOrder || JSON.parse(localStorage.getItem('hyfun_current_order'));
-    
-    if (!order) {
+// Print Receipt Function
+function printReceipt() {
+    if (!currentOrder && !localStorage.getItem('hyfun_current_order')) {
         showNotification('No order found to print', 'error');
         return;
     }
+    
+    const order = currentOrder || JSON.parse(localStorage.getItem('hyfun_current_order'));
+    const printFrame = document.getElementById('printFrame');
     
     let itemsHTML = '';
     let subtotal = 0;
@@ -1186,12 +1080,12 @@ function printBill() {
         subtotal += itemTotal;
         
         itemsHTML += `
-            <tr>
-                <td>${item.name}</td>
-                <td>${item.quantity}</td>
-                <td>₹${item.price}</td>
-                <td>₹${itemTotal}</td>
-            </tr>
+            <div class="receipt-item">
+                <span>${item.name}</span>
+                <span>${item.quantity}</span>
+                <span>₹${item.price}</span>
+                <span>₹${itemTotal}</span>
+            </div>
         `;
     });
     
@@ -1199,113 +1093,206 @@ function printBill() {
     const tax = subtotal * 0.05;
     const total = subtotal + deliveryFee + tax;
     
-    const printContent = `
+    const receiptContent = `
         <!DOCTYPE html>
         <html>
         <head>
-            <title>HyFun Foods - Invoice ${order.id}</title>
+            <title>HyFun Foods - Receipt</title>
             <style>
-                body { font-family: Arial, sans-serif; padding: 20px; }
-                .invoice { max-width: 800px; margin: 0 auto; }
-                .header { text-align: center; margin-bottom: 30px; }
-                .info { display: flex; justify-content: space-between; margin-bottom: 30px; }
-                table { width: 100%; border-collapse: collapse; margin-bottom: 30px; }
-                th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
-                th { background-color: #f5f5f5; }
-                .total { text-align: right; font-weight: bold; }
-                .thankyou { text-align: center; margin-top: 40px; color: #666; }
+                * { margin: 0; padding: 0; box-sizing: border-box; }
+                body {
+                    font-family: 'Inter', Arial, sans-serif;
+                    background: #f5f5f5;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    min-height: 100vh;
+                }
+                .receipt-print {
+                    max-width: 400px;
+                    margin: 20px auto;
+                    padding: 30px;
+                    background: white;
+                    border-radius: 16px;
+                    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+                }
+                .receipt-header {
+                    text-align: center;
+                    margin-bottom: 30px;
+                    padding-bottom: 20px;
+                    border-bottom: 2px dashed #78B04B;
+                }
+                .receipt-logo {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 10px;
+                    margin-bottom: 15px;
+                }
+                .receipt-logo img {
+                    width: 50px;
+                    height: 50px;
+                }
+                .receipt-logo h2 {
+                    font-size: 1.8rem;
+                    color: #78B04B;
+                }
+                .receipt-header p {
+                    color: #666;
+                    margin: 5px 0;
+                }
+                .receipt-order-info {
+                    margin-bottom: 25px;
+                    padding: 15px;
+                    background: #E8F7FA;
+                    border-radius: 10px;
+                }
+                .receipt-order-info p {
+                    display: flex;
+                    justify-content: space-between;
+                    margin: 8px 0;
+                }
+                .receipt-items {
+                    margin-bottom: 25px;
+                }
+                .receipt-item {
+                    display: grid;
+                    grid-template-columns: 2fr 1fr 1fr 1fr;
+                    gap: 10px;
+                    padding: 10px 0;
+                    border-bottom: 1px solid #eee;
+                    font-size: 0.9rem;
+                }
+                .receipt-item-header {
+                    font-weight: 700;
+                    color: #78B04B;
+                    border-bottom: 2px solid #78B04B;
+                    padding-bottom: 10px;
+                    margin-bottom: 10px;
+                }
+                .receipt-total {
+                    margin-top: 25px;
+                    padding-top: 15px;
+                    border-top: 2px dashed #78B04B;
+                }
+                .receipt-total p {
+                    display: flex;
+                    justify-content: space-between;
+                    margin: 8px 0;
+                    font-size: 1rem;
+                }
+                .receipt-total .grand-total {
+                    font-size: 1.3rem;
+                    font-weight: 700;
+                    color: #78B04B;
+                    margin-top: 10px;
+                    padding-top: 10px;
+                    border-top: 1px solid #eee;
+                }
+                .receipt-footer {
+                    text-align: center;
+                    margin-top: 30px;
+                    padding-top: 20px;
+                    border-top: 2px dashed #78B04B;
+                    color: #666;
+                    font-size: 0.9rem;
+                }
+                .receipt-footer i {
+                    color: #78B04B;
+                    margin: 0 5px;
+                }
+                .print-button {
+                    text-align: center;
+                    margin-top: 20px;
+                }
+                .print-button button {
+                    padding: 12px 30px;
+                    background: #78B04B;
+                    color: white;
+                    border: none;
+                    border-radius: 50px;
+                    font-size: 1rem;
+                    font-weight: 600;
+                    cursor: pointer;
+                    transition: all 0.3s ease;
+                }
+                .print-button button:hover {
+                    transform: translateY(-2px);
+                    box-shadow: 0 10px 20px rgba(120, 176, 75, 0.3);
+                }
                 @media print {
-                    .no-print { display: none; }
+                    .print-button { display: none; }
                 }
             </style>
         </head>
         <body>
-            <div class="invoice">
-                <div class="header">
-                    <h1>HyFun Foods</h1>
-                    <h2>INVOICE</h2>
-                    <p>Order ID: ${order.id}</p>
-                    <p>Date: ${new Date(order.date).toLocaleDateString()}</p>
-                </div>
-                
-                <div class="info">
-                    <div>
-                        <h3>Billed To:</h3>
-                        <p>${order.customer.name}</p>
-                        <p>${order.customer.address}</p>
-                        <p>${order.customer.city} - ${order.customer.pincode}</p>
-                        <p>Phone: ${order.customer.phone}</p>
+            <div class="receipt-print">
+                <div class="receipt-header">
+                    <div class="receipt-logo">
+                        <img src="./assets/image/hyfun_logo.png" alt="HyFun Foods">
+                        <h2>HyFun<span style="color: #78B04B;">Foods</span></h2>
                     </div>
+                    <p>Order Receipt</p>
+                    <p>${new Date(order.date).toLocaleString()}</p>
                 </div>
                 
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Item</th>
-                            <th>Qty</th>
-                            <th>Price</th>
-                            <th>Total</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        ${itemsHTML}
-                    </tbody>
-                </table>
-                
-                <div class="total">
-                    <p>Subtotal: ₹${subtotal.toFixed(2)}</p>
-                    <p>Delivery Fee: ₹${deliveryFee}</p>
-                    <p>Tax (5%): ₹${tax.toFixed(2)}</p>
-                    <h3>Total: ₹${total.toFixed(2)}</h3>
-                    <p>Payment Method: ${order.payment.toUpperCase()}</p>
+                <div class="receipt-order-info">
+                    <p><span>Order ID:</span> <strong>${order.id}</strong></p>
+                    <p><span>Customer:</span> <strong>${order.customer.name}</strong></p>
+                    <p><span>Phone:</span> <strong>${order.customer.phone}</strong></p>
+                    <p><span>Address:</span> <strong>${order.customer.address}, ${order.customer.city} - ${order.customer.pincode}</strong></p>
+                    <p><span>Payment:</span> <strong>${order.payment.toUpperCase()}</strong></p>
                 </div>
                 
-                <div class="thankyou">
-                    <p>Thank you for ordering from HyFun Foods!</p>
-                    <p>Visit us again at hyfunfoods.com</p>
+                <div class="receipt-items">
+                    <div class="receipt-item receipt-item-header">
+                        <span>Item</span>
+                        <span>Qty</span>
+                        <span>Price</span>
+                        <span>Total</span>
+                    </div>
+                    ${itemsHTML}
                 </div>
                 
-                <button class="no-print" onclick="window.print()" style="padding: 10px 20px; margin-top: 20px;">
-                    Print Bill
-                </button>
+                <div class="receipt-total">
+                    <p><span>Subtotal:</span> <span>₹${subtotal}</span></p>
+                    <p><span>Delivery Fee:</span> <span>₹40</span></p>
+                    <p><span>Tax (5%):</span> <span>₹${tax.toFixed(2)}</span></p>
+                    <p class="grand-total"><span>Total:</span> <span>₹${total.toFixed(2)}</span></p>
+                </div>
+                
+                <div class="receipt-footer">
+                    <p>Thank you for ordering with HyFun Foods!</p>
+                    <p>We hope you enjoy your meal <i class="fas fa-heart"></i></p>
+                </div>
+                
+                <div class="print-button">
+                    <button onclick="window.print()">Print Receipt</button>
+                </div>
             </div>
         </body>
         </html>
     `;
     
-    printWindow.document.write(printContent);
-    printWindow.document.close();
+    printFrame.srcdoc = receiptContent;
+    printFrame.onload = function() {
+        printFrame.contentWindow.print();
+    };
 }
 
-// Share Bill
-function shareBill() {
-    if (navigator.share) {
-        const order = currentOrder || JSON.parse(localStorage.getItem('hyfun_current_order'));
-        
-        navigator.share({
-            title: `HyFun Foods Order - ${order.id}`,
-            text: `Check out my HyFun Foods order! Order ID: ${order.id}\nTotal: ₹${calculateOrderTotal(order)}`,
-            url: window.location.href
-        })
-        .then(() => showNotification('Bill shared successfully!', 'success'))
-        .catch(err => console.log('Error sharing:', err));
-    } else {
-        showNotification('Web Share API not supported in your browser', 'info');
-    }
+// Add minutes to date
+function addMinutes(date, minutes) {
+    return new Date(date.getTime() + minutes * 60000);
 }
 
-// Calculate Order Total
-function calculateOrderTotal(order) {
-    let subtotal = order.items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-    const deliveryFee = 40;
-    const tax = subtotal * 0.05;
-    return (subtotal + deliveryFee + tax).toFixed(2);
+// Format time
+function formatTime(date) {
+    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 }
 
-// Update Rating Stars
-function updateRatingStars(rating, save = true) {
-    const stars = document.querySelectorAll('.rating-stars i');
-    const ratingValue = document.getElementById('ratingValue');
+// Update rating stars
+function updateRatingStars(rating) {
+    const stars = document.querySelectorAll('.rating-stars-enhanced i');
     
     stars.forEach((star, index) => {
         if (index < rating) {
@@ -1314,15 +1301,45 @@ function updateRatingStars(rating, save = true) {
             star.classList.remove('active');
         }
     });
-    
-    ratingValue.textContent = rating;
-    
-    if (save) {
-        userRating = rating;
-    }
 }
 
-// Submit Review
+// Highlight stars on hover
+function highlightStars(rating) {
+    const stars = document.querySelectorAll('.rating-stars-enhanced i');
+    
+    stars.forEach((star, index) => {
+        if (index < rating) {
+            star.classList.add('active');
+        } else {
+            star.classList.remove('active');
+        }
+    });
+}
+
+// Update rating circle
+function updateRatingCircle(rating) {
+    const circle = document.querySelector('.progress-ring-enhanced');
+    if (!circle) return;
+    
+    const radius = 64;
+    const circumference = 2 * Math.PI * radius;
+    const offset = circumference - (rating / 5) * circumference;
+    
+    circle.style.strokeDashoffset = offset;
+    document.getElementById('ratingNumber').textContent = rating;
+}
+
+// Update rating message
+function updateRatingMessage(rating) {
+    document.querySelectorAll('.rating-message').forEach(msg => {
+        msg.classList.remove('active');
+        if (parseInt(msg.getAttribute('data-rating')) === rating) {
+            msg.classList.add('active');
+        }
+    });
+}
+
+// Submit review
 function submitReview() {
     const title = document.getElementById('reviewTitle').value;
     const text = document.getElementById('reviewText').value;
@@ -1337,7 +1354,6 @@ function submitReview() {
         return;
     }
     
-    // In a real app, you would send this to your server
     const review = {
         rating: userRating,
         title: title,
@@ -1346,164 +1362,67 @@ function submitReview() {
         orderId: currentOrder ? currentOrder.id : 'N/A'
     };
     
-    // Save review locally
     const reviews = JSON.parse(localStorage.getItem('hyfun_reviews')) || [];
     reviews.push(review);
     localStorage.setItem('hyfun_reviews', JSON.stringify(reviews));
     
-    // Show success
     document.getElementById('reviewForm').style.display = 'none';
     document.getElementById('reviewSuccess').style.display = 'block';
     
     showNotification('Thank you for your review!', 'success');
 }
 
-// Show Loading Overlay
+// Show loading overlay
 function showLoading() {
     document.getElementById('loadingOverlay').classList.add('active');
 }
 
-// Hide Loading Overlay
+// Hide loading overlay
 function hideLoading() {
     document.getElementById('loadingOverlay').classList.remove('active');
 }
 
-// Show Notification
+// Show notification
 function showNotification(message, type = 'info') {
-    // Remove existing notification
-    const existingNotification = document.querySelector('.notification');
-    if (existingNotification) {
-        existingNotification.remove();
-    }
+    const container = document.getElementById('notificationContainer');
     
-    // Create notification
     const notification = document.createElement('div');
-    notification.className = `notification notification-${type}`;
+    notification.className = `notification-modern ${type}`;
     notification.innerHTML = `
-        <span>${message}</span>
-        <button class="notification-close"><i class="fas fa-times"></i></button>
+        <div class="notification-icon">
+            <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
+        </div>
+        <div class="notification-content">
+            <div class="notification-title">${type.toUpperCase()}</div>
+            <div class="notification-message">${message}</div>
+        </div>
+        <button class="notification-close">
+            <i class="fas fa-times"></i>
+        </button>
     `;
     
-    // Add styles
-    const style = document.createElement('style');
-    style.textContent = `
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 15px 20px;
-            border-radius: var(--border-radius);
-            color: white;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            z-index: 9999;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-            animation: slideInRight 0.3s ease, fadeOut 0.3s ease 3s forwards;
-        }
-        
-        .notification-info { background: var(--primary); }
-        .notification-success { background: var(--success); }
-        .notification-warning { background: var(--warning); }
-        .notification-error { background: var(--danger); }
-        
-        .notification-close {
-            background: none;
-            border: none;
-            color: white;
-            cursor: pointer;
-            font-size: 1rem;
-        }
-        
-        @keyframes slideInRight {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-        
-        @keyframes fadeOut {
-            to { opacity: 0; }
-        }
-    `;
+    container.appendChild(notification);
     
-    document.head.appendChild(style);
-    document.body.appendChild(notification);
-    
-    // Close button
-    notification.querySelector('.notification-close').addEventListener('click', function() {
+    notification.querySelector('.notification-close').addEventListener('click', () => {
         notification.remove();
-        style.remove();
     });
     
-    // Auto remove after 3 seconds
     setTimeout(() => {
         if (notification.parentNode) {
             notification.remove();
-            style.remove();
         }
-    }, 3000);
+    }, 5000);
 }
 
-// Initialize Floating Action Button for mobile
-function initMobileFab() {
-    const fab = document.createElement('div');
-    fab.className = 'fab';
-    fab.innerHTML = '<i class="fas fa-shopping-cart"></i>';
-    fab.addEventListener('click', toggleCart);
-    document.body.appendChild(fab);
-    
-    // Update cart count on fab
-    const updateFab = () => {
-        const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-        if (totalItems > 0) {
-            fab.setAttribute('data-count', totalItems);
-        } else {
-            fab.removeAttribute('data-count');
-        }
+// Debounce function
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
     };
-    
-    // Update fab when cart changes
-    const originalUpdateCartCount = updateCartCount;
-    updateCartCount = function() {
-        originalUpdateCartCount();
-        updateFab();
-    };
-    
-    updateFab();
 }
-
-// Initialize mobile fab on load
-if (window.innerWidth <= 768) {
-    initMobileFab();
-}
-
-// Add CSS for fab data-count
-const fabStyle = document.createElement('style');
-fabStyle.textContent = `
-    .fab[data-count]::after {
-        content: attr(data-count);
-        position: absolute;
-        top: -5px;
-        right: -5px;
-        background: var(--accent);
-        color: white;
-        font-size: 12px;
-        font-weight: bold;
-        width: 20px;
-        height: 20px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-`;
-document.head.appendChild(fabStyle);
-
-// Handle window resize
-window.addEventListener('resize', function() {
-    if (window.innerWidth <= 768 && !document.querySelector('.fab')) {
-        initMobileFab();
-    } else if (window.innerWidth > 768 && document.querySelector('.fab')) {
-        document.querySelector('.fab')?.remove();
-    }
-});
