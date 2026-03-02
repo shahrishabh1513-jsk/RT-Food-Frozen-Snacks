@@ -1,7 +1,3 @@
-/* ============================================
-   HYFUN FOODS - MODERN ORDERING SYSTEM (FIXED)
-   ============================================ */
-
 :root {
     --bg-main: #E8F7FA;
     --bg-card: #FFFFFF;
@@ -113,92 +109,100 @@ body {
     66% { transform: translate(-20px, 20px) rotate(240deg); }
 }
 
-/* Progress Bar - FIXED positioning */
-.progress-container {
+/* Vertical Progress Indicator (Right Side) */
+.vertical-progress {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    background: var(--bg-card);
-    box-shadow: var(--shadow);
-    z-index: 999;
-    padding: 12px 0;
-    backdrop-filter: blur(10px);
-    background: rgba(255, 255, 255, 0.95);
-}
-
-.progress-steps {
-    display: flex;
-    justify-content: space-around;
-    max-width: 1200px;
-    margin: 0 auto;
-    position: relative;
-}
-
-.progress-step {
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 4px;
+    gap: 25px;
+    z-index: 1000;
+    padding: 20px 0;
+}
+
+.vertical-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
     cursor: pointer;
     position: relative;
     z-index: 2;
-    min-width: 70px;
 }
 
-.step-indicator {
+.step-icon-wrapper {
     width: 45px;
     height: 45px;
-    background: var(--bg-main);
+    background: transparent;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     color: var(--text-muted);
-    font-size: 1.1rem;
+    font-size: 1.3rem;
     transition: var(--transition);
     border: 2px solid transparent;
 }
 
-.progress-step.active .step-indicator {
-    background: var(--green);
-    color: white;
-    transform: scale(1.05);
-    box-shadow: 0 0 20px rgba(120, 176, 75, 0.3);
-    animation: pulse 2s infinite;
+.vertical-step.active .step-icon-wrapper {
+    color: var(--green);
+    transform: scale(1.1);
+    text-shadow: 0 0 10px rgba(120, 176, 75, 0.5);
 }
 
-.step-label {
-    font-size: 0.7rem;
+.step-label-vertical {
+    font-size: 0.65rem;
     font-weight: 600;
     color: var(--text-muted);
     text-transform: uppercase;
-    letter-spacing: 0.3px;
+    letter-spacing: 0.5px;
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    opacity: 0;
+    transition: var(--transition);
 }
 
-.progress-step.active .step-label {
+.vertical-step:hover .step-label-vertical {
+    opacity: 1;
     color: var(--green);
 }
 
-.progress-bar-fill {
+.vertical-step.active .step-label-vertical {
+    opacity: 1;
+    color: var(--green);
+}
+
+.vertical-progress-line {
     position: absolute;
+    top: 0;
     bottom: 0;
-    left: 0;
-    height: 3px;
-    background: linear-gradient(90deg, var(--green), var(--blue));
-    transition: width 0.5s ease;
-    border-radius: 3px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 2px;
+    background: rgba(0, 0, 0, 0.1);
+    z-index: 1;
 }
 
-@keyframes pulse {
-    0%, 100% { transform: scale(1.05); }
-    50% { transform: scale(1.1); }
+.vertical-progress-fill {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 2px;
+    height: 0%;
+    background: linear-gradient(180deg, var(--green), var(--blue));
+    transition: height 0.5s ease;
+    z-index: 1;
+    border-radius: 2px;
 }
 
-/* Modern Header - FIXED positioning */
+/* Modern Header */
 .modern-header {
     position: fixed;
-    top: 73px; /* Adjusted to sit below progress bar */
+    top: 0;
     left: 0;
     width: 100%;
     background: var(--bg-card);
@@ -320,11 +324,11 @@ body {
     50% { transform: translateY(-3px); }
 }
 
-/* Main Content - FIXED margins */
+/* Main Content - Adjusted for vertical progress */
 .main-content {
-    margin-top: calc(73px + var(--header-height));
-    min-height: calc(100vh - 73px - var(--header-height));
-    padding: 30px 0;
+    margin-top: var(--header-height);
+    min-height: calc(100vh - var(--header-height));
+    padding: 30px 60px 30px 30px;
 }
 
 .content-section {
@@ -351,12 +355,11 @@ body {
 .hero-modern {
     max-width: 1400px;
     margin: 0 auto;
-    padding: 0 30px;
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 60px;
     align-items: center;
-    min-height: calc(100vh - 73px - var(--header-height) - 60px);
+    min-height: calc(100vh - var(--header-height) - 60px);
 }
 
 .hero-content-wrapper {
@@ -832,7 +835,6 @@ body {
 .products-modern {
     max-width: 1400px;
     margin: 0 auto;
-    padding: 0 30px;
 }
 
 .products-header-modern {
@@ -1352,7 +1354,6 @@ body {
 .payment-modern {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 30px;
 }
 
 .payment-grid {
@@ -1635,7 +1636,7 @@ body {
     box-shadow: 0 10px 20px rgba(120, 176, 75, 0.3);
 }
 
-/* SECTION 6: Tracking Modern - FIXED with Map Background */
+/* SECTION 6: Tracking Modern */
 .tracking-modern {
     max-width: 900px;
     margin: 0 auto;
@@ -1989,7 +1990,7 @@ body {
     margin-top: 20px;
 }
 
-/* SECTION 7: Review Enhanced */
+/* SECTION 7: Review Enhanced with Proper Rating */
 .review-modern-enhanced {
     max-width: 700px;
     margin: 0 auto;
@@ -2135,16 +2136,17 @@ body {
     margin-top: 5px;
 }
 
+/* Fixed Rating Stars */
 .rating-stars-enhanced {
     display: flex;
     gap: 15px;
     justify-content: center;
-    margin-bottom: 15px;
+    margin-bottom: 20px;
     position: relative;
 }
 
 .rating-stars-enhanced i {
-    font-size: 2.5rem;
+    font-size: 2.8rem;
     color: #E0E0E0;
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -2157,52 +2159,39 @@ body {
 
 .rating-stars-enhanced i.active {
     color: #FFB800;
-    text-shadow: 0 0 10px rgba(255, 184, 0, 0.5);
+    text-shadow: 0 0 15px rgba(255, 184, 0, 0.7);
 }
 
 .rating-stars-enhanced i.active ~ i {
     color: #E0E0E0;
 }
 
-.stars-glow {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 200px;
-    height: 50px;
-    background: radial-gradient(circle, rgba(255, 184, 0, 0.2), transparent);
-    filter: blur(10px);
-    pointer-events: none;
-}
-
+/* Rating Messages */
 .rating-messages {
     display: flex;
     justify-content: center;
     gap: 15px;
-    margin-top: 10px;
+    margin-top: 15px;
+    flex-wrap: wrap;
 }
 
 .rating-message {
     font-size: 0.9rem;
-    padding: 5px 12px;
-    border-radius: 20px;
+    padding: 6px 15px;
+    border-radius: 30px;
     background: var(--bg-main);
     color: var(--text-muted);
     transition: var(--transition);
     cursor: default;
+    font-weight: 500;
 }
 
-.rating-message[data-rating="1"]:hover,
-.rating-message[data-rating="1"].active { background: #FF6B6B; color: white; }
-.rating-message[data-rating="2"]:hover,
-.rating-message[data-rating="2"].active { background: #FFA726; color: white; }
-.rating-message[data-rating="3"]:hover,
-.rating-message[data-rating="3"].active { background: #FFD700; color: white; }
-.rating-message[data-rating="4"]:hover,
-.rating-message[data-rating="4"].active { background: #4CAF50; color: white; }
-.rating-message[data-rating="5"]:hover,
-.rating-message[data-rating="5"].active { background: #2196F3; color: white; }
+.rating-message.active {
+    background: var(--green);
+    color: white;
+    transform: scale(1.05);
+    box-shadow: 0 5px 15px rgba(120, 176, 75, 0.3);
+}
 
 /* Review Form Enhanced */
 .review-form-enhanced {
@@ -2405,11 +2394,6 @@ body {
     animation: heartbeat 1.5s ease infinite;
 }
 
-@keyframes heartbeat {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.2); }
-}
-
 .btn-home-enhanced {
     padding: 15px 40px;
     background: linear-gradient(135deg, var(--green), var(--blue));
@@ -2430,16 +2414,16 @@ body {
     box-shadow: 0 10px 20px rgba(120, 176, 75, 0.3);
 }
 
-/* Cart Sidebar Modern - FIXED positioning */
+/* Cart Sidebar Modern - FIXED */
 .cart-sidebar-modern {
     position: fixed;
-    top: calc(73px + var(--header-height));
+    top: var(--header-height);
     right: -400px;
     width: 380px;
-    height: calc(100vh - 73px - var(--header-height));
+    height: calc(100vh - var(--header-height));
     background: var(--bg-card);
     box-shadow: -5px 0 30px rgba(0, 0, 0, 0.15);
-    z-index: 1000;
+    z-index: 999;
     transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     display: flex;
     flex-direction: column;
@@ -2958,6 +2942,16 @@ body {
 
 /* Responsive Design */
 @media (max-width: 1200px) {
+    .vertical-progress {
+        right: 10px;
+    }
+    
+    .step-icon-wrapper {
+        width: 40px;
+        height: 40px;
+        font-size: 1.1rem;
+    }
+    
     .hero-modern {
         grid-template-columns: 1fr;
         text-align: center;
@@ -2981,17 +2975,18 @@ body {
 }
 
 @media (max-width: 992px) {
-    .progress-container {
-        overflow-x: auto;
+    .main-content {
+        padding: 30px 50px 30px 20px;
     }
     
-    .progress-steps {
-        width: max-content;
-        padding: 0 20px;
+    .vertical-progress {
+        right: 5px;
     }
     
-    .progress-step {
-        min-width: 70px;
+    .step-icon-wrapper {
+        width: 35px;
+        height: 35px;
+        font-size: 1rem;
     }
     
     .form-grid {
@@ -3019,6 +3014,14 @@ body {
 }
 
 @media (max-width: 768px) {
+    .vertical-progress {
+        display: none;
+    }
+    
+    .main-content {
+        padding: 30px 20px;
+    }
+    
     .header-container {
         padding: 0 15px;
     }
@@ -3118,7 +3121,12 @@ body {
     }
     
     .rating-messages {
-        flex-wrap: wrap;
+        gap: 8px;
+    }
+    
+    .rating-message {
+        font-size: 0.8rem;
+        padding: 4px 10px;
     }
 }
 
@@ -3137,33 +3145,4 @@ body {
 
 .hidden {
     display: none;
-}
-
-/* Print Styles */
-@media print {
-    .progress-container,
-    .modern-header,
-    .cart-sidebar-modern,
-    .modal-modern,
-    .loading-overlay-modern,
-    .btn-primary,
-    .btn-secondary,
-    .btn-print-receipt,
-    .tracking-actions-modern {
-        display: none !important;
-    }
-    
-    .main-content {
-        margin: 0;
-        padding: 0;
-    }
-    
-    .content-section {
-        display: block !important;
-    }
-    
-    .receipt-print {
-        box-shadow: none;
-        padding: 0;
-    }
 }

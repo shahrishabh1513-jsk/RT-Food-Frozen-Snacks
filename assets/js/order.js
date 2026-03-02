@@ -1,7 +1,3 @@
-// ============================================
-// HYFUN FOODS - MODERN ORDERING SYSTEM (FIXED)
-// ============================================
-
 // Global State
 let currentUser = null;
 let cart = JSON.parse(localStorage.getItem('hyfun_cart')) || [];

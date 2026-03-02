@@ -22,55 +22,6 @@
         </div>
     </div>
 
-    <!-- Modern Progress Bar -->
-    <div class="progress-container">
-        <div class="progress-steps">
-            <div class="progress-step" data-step="1">
-                <div class="step-indicator">
-                    <i class="fas fa-rocket"></i>
-                </div>
-                <span class="step-label">START</span>
-            </div>
-            <div class="progress-step" data-step="2">
-                <div class="step-indicator">
-                    <i class="fas fa-lock"></i>
-                </div>
-                <span class="step-label">LOGIN</span>
-            </div>
-            <div class="progress-step" data-step="3">
-                <div class="step-indicator">
-                    <i class="fas fa-utensils"></i>
-                </div>
-                <span class="step-label">MENU</span>
-            </div>
-            <div class="progress-step" data-step="4">
-                <div class="step-indicator">
-                    <i class="fas fa-map-marker-alt"></i>
-                </div>
-                <span class="step-label">DETAILS</span>
-            </div>
-            <div class="progress-step" data-step="5">
-                <div class="step-indicator">
-                    <i class="fas fa-credit-card"></i>
-                </div>
-                <span class="step-label">PAYMENT</span>
-            </div>
-            <div class="progress-step" data-step="6">
-                <div class="step-indicator">
-                    <i class="fas fa-truck"></i>
-                </div>
-                <span class="step-label">TRACK</span>
-            </div>
-            <div class="progress-step" data-step="7">
-                <div class="step-indicator">
-                    <i class="fas fa-star"></i>
-                </div>
-                <span class="step-label">REVIEW</span>
-            </div>
-        </div>
-        <div class="progress-bar-fill" id="progressFill"></div>
-    </div>
-
     <!-- Sticky Header -->
     <header class="modern-header">
         <div class="header-container">
@@ -610,7 +561,7 @@
             </div>
         </section>
 
-        <!-- SECTION 6: Order Tracking (FIXED) -->
+        <!-- SECTION 6: Order Tracking -->
         <section id="section-tracking" class="content-section">
             <div class="tracking-modern">
                 <div class="tracking-header">
@@ -730,7 +681,7 @@
             </div>
         </section>
 
-        <!-- SECTION 7: Review (ENHANCED) -->
+        <!-- SECTION 7: Review (ENHANCED with proper rating) -->
         <section id="section-review" class="content-section">
             <div class="review-modern-enhanced">
                 <!-- Decorative Elements -->
@@ -746,7 +697,7 @@
                 </div>
                 
                 <div class="review-card-enhanced">
-                    <!-- Rating Section -->
+                    <!-- Rating Section with Proper Stars -->
                     <div class="rating-section-enhanced">
                         <div class="rating-circle-enhanced" id="ratingCircle">
                             <div class="circle-progress">
@@ -761,7 +712,8 @@
                             <div class="rating-label">Your Rating</div>
                         </div>
                         
-                        <div class="rating-stars-enhanced">
+                        <!-- Rating Stars - Fixed Selection -->
+                        <div class="rating-stars-enhanced" id="ratingStars">
                             <i class="fas fa-star" data-rating="1"></i>
                             <i class="fas fa-star" data-rating="2"></i>
                             <i class="fas fa-star" data-rating="3"></i>
@@ -770,12 +722,13 @@
                             <div class="stars-glow"></div>
                         </div>
                         
-                        <div class="rating-messages">
-                            <div class="rating-message" data-rating="1">😞 Poor</div>
-                            <div class="rating-message" data-rating="2">😐 Fair</div>
-                            <div class="rating-message" data-rating="3">🙂 Good</div>
-                            <div class="rating-message" data-rating="4">😊 Very Good</div>
-                            <div class="rating-message" data-rating="5">🥰 Excellent</div>
+                        <!-- Rating Messages -->
+                        <div class="rating-messages" id="ratingMessages">
+                            <div class="rating-message" data-rating="1">Poor</div>
+                            <div class="rating-message" data-rating="2">Fair</div>
+                            <div class="rating-message" data-rating="3">Good</div>
+                            <div class="rating-message" data-rating="4">Very Good</div>
+                            <div class="rating-message" data-rating="5">Excellent</div>
                         </div>
                     </div>
                     
@@ -840,7 +793,7 @@
         </section>
     </main>
 
-    <!-- Modern Cart Sidebar -->
+    <!-- Modern Cart Sidebar (FIXED - Shows products properly) -->
     <div class="cart-sidebar-modern" id="cartSidebar">
         <div class="cart-sidebar-header">
             <h3>Your Cart</h3>
