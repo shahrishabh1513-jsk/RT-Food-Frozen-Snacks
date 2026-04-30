@@ -1,58 +1,139 @@
-🍟 HyFun Foods Corporate Website
+# 🍟 HYFUN FOODS — Corporate Website
 
-Potatoes for the World – A tasty, modern corporate website showcasing HyFun Foods and its range of delicious frozen potato snacks! 🌎🥔
+<p align="center">
+  <img src="https://cdn-icons-png.flaticon.com/512/2674/2674067.png" width="60" title="Food Website"/>
+  &nbsp;&nbsp;&nbsp;
+  <img src="https://cdn-icons-png.flaticon.com/512/4651/4651706.png" width="60" title="Frontend Development"/>
+  &nbsp;&nbsp;&nbsp;
+  <img src="https://cdn-icons-png.flaticon.com/512/2721/2721291.png" width="60" title="Responsive Design"/>
+  &nbsp;&nbsp;&nbsp;
+  <img src="https://cdn-icons-png.flaticon.com/512/5956/5956494.png" width="60" title="Project"/>
+  &nbsp;&nbsp;&nbsp;
+  <img src="https://cdn-icons-png.flaticon.com/512/5787/5787016.png" width="60" title="Food UI"/>
+</p>
 
-🚀 Live Demo
+<p align="center">
+  A modern 🍔 corporate food website designed with a clean UI, smooth animations, and fully responsive layout — focused on delivering a professional brand experience.
+</p>
 
-👉 https://shahrishabh1513-jsk.github.io/hyfun-foods-corporate-website/
+---
 
-Check out the fully deployed site — beautifully responsive and ready for customers!
+## 🌐 Live Demo
 
-📌 Overview
+🔗 **View Website:**  
+https://shahrishabh1513-jsk.github.io/hyfun-foods-corporate-website/
 
-HyFun Foods is a corporate website built using HTML, CSS, and JavaScript to present:
+---
 
-🍽️ Company story & culture
-📦 Products (e.g., French Fries, Crinkle Fries, XLF Fries)
-🌱 Quality highlights (100% natural, vegetarian, easy prep)
-🌍 Global exports & partner brands
-📞 Contact & order details
+## 🏢 About The Project
 
-The site is clean, modern, mobile-friendly, and designed to represent a professional food brand online.
+**HYFUN FOODS Corporate Website** is a frontend-based project that represents a real-world food brand website.
 
-📋 Table of Contents
+It focuses on:
+- Corporate-style UI/UX 🏢  
+- Smooth user experience ⚡  
+- Responsive design 📱  
+- Clean and structured layout 🎨  
 
-🤝 About the Project
+This project highlights strong **frontend development and design skills**.
 
-🛠️ Tech Stack
+---
 
-🎯 Features
+## ✨ Key Features
 
-🔄 How to Use / Install
+- 🍔 Modern corporate UI design  
+- 📱 Fully responsive (Mobile, Tablet, Desktop)  
+- ⚡ Smooth animations & transitions  
+- 🧭 Interactive navigation  
+- 📦 Product showcase pages  
+- 📖 Seed-to-shelf & company story sections  
+- 📬 Contact section  
+- 🚀 Lightweight & fast performance  
 
-📂 Project Structure
+---
 
-🧠 Future Ideas
+## 🛠️ Built With
 
-📞 Contact
+<p align="center">
+  <img src="https://cdn-icons-png.flaticon.com/512/1051/1051277.png" width="55" title="HTML"/>
+  &nbsp;&nbsp;
+  <img src="https://cdn-icons-png.flaticon.com/512/732/732190.png" width="55" title="CSS"/>
+  &nbsp;&nbsp;
+  <img src="https://cdn-icons-png.flaticon.com/512/1199/1199124.png" width="55" title="JavaScript"/>
+</p>
 
-🤝 About The Project
+- **HTML5** — Structure  
+- **CSS3** — Styling & responsiveness  
+- **JavaScript** — Interactivity  
 
-This project is a corporate website for a food brand, showcasing their mission — “Spreading health & happiness to as many countries as possible” — along with the full product range, partner brands, and easy customer engagement.
+---
 
-It’s an excellent example of a static HTML/CSS project deployed via GitHub Pages.
+## 📁 Project Structure
 
-🛠️ Built With
-Technology	Purpose
-🔹 HTML5	Structure & content
-🔹 CSS3	Styling & responsive layout
-🔹 JavaScript	Interactive UI elements
-🔹 GitHub Pages	Free web hosting & deployment
-🎯 Key Features
+```bash
+📦 hyfun-foods-corporate-website
+ ┣ 📜 index.html
+ ┣ 📜 about.html
+ ┣ 📜 products.html
+ ┣ 📜 seedtoshelf.html
+ ┣ 📜 style.css
+ ┣ 📜 script.js
+ ┣ 📁 assets
+ ┗ 📜 README.md
+```
 
-✨ Fully responsive design – looks great on desktop & mobile
-🍟 Product showcase with images and descriptions
-🌍 Export & partners section with global brands
-📞 Contact & “Order Now” call-to-action
-🍽️ Clean corporate layout with smooth navigation
-📇 Footer with legal links & company details
+---
+
+## 📸 Preview
+
+<!-- Replace with your real screenshot -->
+<img src="https://via.placeholder.com/1200x600.png?text=HYFUN+FOODS+Preview" width="100%" />
+
+---
+
+## 🚀 Future Enhancements
+
+- 🛒 Smart ordering UI (frontend simulation)  
+- 🔍 Product filtering system  
+- 🌙 Dark / Light mode  
+- 🎬 Advanced animations (GSAP)  
+- 📊 Performance & SEO improvements  
+
+---
+
+## 🧠 What I Learned
+
+- Designing corporate-level UI/UX  
+- Building responsive layouts from scratch  
+- Improving user interaction with JavaScript  
+- Structuring real-world frontend projects  
+- Creating visually appealing web interfaces  
+
+---
+
+## 👨‍💻 Author
+
+**Rishabh Shah**  
+Frontend Developer 🚀  
+
+Passionate about building modern, responsive, and visually appealing web experiences.
+
+---
+
+## 🤝 Connect With Me
+
+<p align="center">
+  <a href="https://github.com/shahrishabh1513-jsk">
+    <img src="https://cdn-icons-png.flaticon.com/512/2504/2504911.png" width="40"/>
+  </a>
+  &nbsp;&nbsp;
+  <a href="https://www.linkedin.com/in/rishabh-alpeshabhai-shah-91b9072a6/">
+    <img src="https://cdn-icons-png.flaticon.com/512/2504/2504923.png" width="40"/>
+  </a>
+</p>
+
+---
+
+<p align="center">
+  ⭐ If you like this project, give it a star!
+</p>
