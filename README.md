@@ -86,8 +86,9 @@ This project highlights strong **frontend development and design skills**.
 
 ## 📸 Preview
 
-<!-- Replace with your real screenshot -->
-<img src="https://via.placeholder.com/1200x600.png?text=HYFUN+FOODS+Preview" width="100%" />
+<img width="1869" height="806" alt="Hyfun_ss1" src="https://github.com/user-attachments/assets/f3edcd0b-2de7-49ba-839c-be08d3f2a5fe" />
+<img width="1786" height="808" alt="Hyfun_ss2" src="https://github.com/user-attachments/assets/26f087a4-e510-4bfa-87f8-49a4bfbb5313" />
+
 
 ---
 
@@ -122,7 +123,7 @@ Passionate about building modern, responsive, and visually appealing web experie
 
 ## 🤝 Connect With Me
 
-<p align="center">
+<p align="left">
   <a href="https://github.com/shahrishabh1513-jsk">
     <img src="https://cdn-icons-png.flaticon.com/512/2504/2504911.png" width="40"/>
   </a>
