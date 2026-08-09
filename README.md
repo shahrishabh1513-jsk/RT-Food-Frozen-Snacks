@@ -2,10 +2,6 @@
 
 <img src="https://capsule-render.vercel.app/api?type=waving&color=0:F7B32E,100:2E9EF7&height=220&section=header&text=HyFun%20Foods&fontSize=60&fontColor=ffffff&animation=fadeIn&fontAlignY=38&desc=Potatoes%20for%20the%20World%20🌍&descAlignY=58&descSize=20"/>
 
-<img src="https://shahrishabh1513-jsk.github.io/hyfun-foods-corporate-website/assets/image/hyfun_logo.png" width="130" alt="HyFun Foods Logo"/>
-
-<img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=22&pause=1000&color=F7B32E&center=true&vCenter=true&width=700&lines=🥔+Responsive+Corporate+Website;⚡+Built+with+HTML%2C+CSS+%26+JavaScript;🌱+100%25+Natural.+100%25+Delicious.;⏱️+Ready+in+Just+3+Minutes!" alt="Typing SVG" />
-
 <br/>
 
 [![Live Demo](https://img.shields.io/badge/🔴_LIVE_DEMO-View_Website-2E9EF7?style=for-the-badge)](https://shahrishabh1513-jsk.github.io/hyfun-foods-corporate-website/)
