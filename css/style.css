@@ -1,5 +1,5 @@
 /* ============================================================
-   HY FUN — design system  (yellow • charcoal • tomato • cream)
+   RT FOOD — design system  (yellow • charcoal • tomato • cream)
    ============================================================ */
 @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Poppins:wght@400;500;600;700&display=swap');
 :root{--y:#FFC400;--y2:#FFAA00;--ink:#262626;--ink2:#3b3b3b;--cream:#FFF9E3;--cream2:#FFF1B8;--red:#FF4D2E;--green:#1FA971;--blue:#2F7DF6;--mute:#6f6a5c;--line:#efe5bd;--card:#fff;--r:22px;--sh:0 12px 34px rgba(80,55,0,.12);--sh2:0 22px 50px rgba(80,55,0,.2)}
@@ -229,3 +229,7 @@ select:focus,input:focus,textarea:focus{border-color:var(--y2);background:#fff;b
 .leaflet-container{font-family:'Poppins',sans-serif}
 
 .page-hero{position:relative}.page-hero .wrap{position:relative;z-index:1}
+
+.disc{text-align:center;font-size:.8rem;color:#e9c75a;padding:0 0 22px;margin:0!important}
+#loader{background:radial-gradient(circle at 50% 40%,#fff,#FFF1B8)}
+.footer p a{display:inline;padding:0}.footer p a:hover{transform:none}

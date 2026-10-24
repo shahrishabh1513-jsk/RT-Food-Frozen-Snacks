@@ -1,6 +1,6 @@
 /* Generic forms (export enquiry, contact, careers) → saved locally in 'inbox' + success note */
 document.addEventListener('DOMContentLoaded', () => {
-  HF.$$('form[data-form]').forEach(form => {
+  RT.$$('form[data-form]').forEach(form => {
     const note = form.querySelector('.note'), kind = form.dataset.form; let file = null;
     const dz = form.querySelector('.drop'), fi = form.querySelector('input[type=file]');
     if (dz) {
@@ -12,10 +12,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     form.addEventListener('submit', e => {
       e.preventDefault(); const d = Object.fromEntries(new FormData(form)); delete d.cv; if (file) d.cvName = file.name;
-      if (dz && !file) { HF.toast('Please attach your CV first', '📎'); return; }
-      const box = HF.store.get('inbox', []); box.push({ kind, ...d, at: new Date().toISOString() }); HF.store.set('inbox', box);
+      if (dz && !file) { RT.toast('Please attach your CV first', '📎'); return; }
+      const box = RT.store.get('inbox', []); box.push({ kind, ...d, at: new Date().toISOString() }); RT.store.set('inbox', box);
       form.reset(); file = null; if (dz) dz.querySelector('b').textContent = '📥 Click or drag your CV here';
-      if (note) { note.classList.add('show'); setTimeout(() => note.classList.remove('show'), 6000); } HF.toast('Thank you! We will get back to you shortly.', '💛');
+      if (note) { note.classList.add('show'); setTimeout(() => note.classList.remove('show'), 6000); } RT.toast('Thank you! We will get back to you shortly.', '💛');
     });
   });
 });

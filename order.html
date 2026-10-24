@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Order Now | Hy Fun – Frozen Snacks &amp; French Fries</title>
-<meta name="description" content="Order Hy Fun frozen snacks online — choose pack sizes, apply coupons, pay by UPI, card or COD and track your rider live.">
+<title>Order Now | RT FOOD – Frozen Snacks &amp; French Fries</title>
+<meta name="description" content="Order RT FOOD frozen snacks online — choose pack sizes, apply coupons, pay by UPI, card or COD and track your rider live.">
 <meta name="theme-color" content="#FFC400">
 <link rel="icon" type="image/png" href="assets/image/favicon.png">
 <link rel="stylesheet" href="css/style.css">
@@ -12,19 +12,18 @@
 </head>
 <body class="loading">
 
-<!-- Page loader (logo in centre) -->
-<div id="loader" aria-label="Loading"><span class="ld-fry" style="left:8%;animation-delay:0s">🍟</span><span class="ld-fry" style="left:24%;animation-delay:0.7s">🥔</span><span class="ld-fry" style="left:41%;animation-delay:1.3s">🍟</span><span class="ld-fry" style="left:63%;animation-delay:0.3s">🥔</span><span class="ld-fry" style="left:80%;animation-delay:1s">🍟</span><span class="ld-fry" style="left:92%;animation-delay:1.7s">🥔</span><div class="ld-ring"></div><img class="ld-logo" src="assets/image/logo.png" alt="Hy Fun"><div class="ld-bar"><i></i></div><div class="ld-txt">Heating up the fryer…</div></div>
+<div id="loader" aria-label="Loading"><span class="ld-fry" style="left:8%;animation-delay:0s">🍟</span><span class="ld-fry" style="left:24%;animation-delay:0.7s">🥔</span><span class="ld-fry" style="left:41%;animation-delay:1.3s">🍟</span><span class="ld-fry" style="left:63%;animation-delay:0.3s">🥔</span><span class="ld-fry" style="left:80%;animation-delay:1s">🍟</span><span class="ld-fry" style="left:92%;animation-delay:1.7s">🥔</span><div class="ld-ring"></div><img class="ld-logo" src="assets/image/logo.png" alt="RT FOOD"><div class="ld-bar"><i></i></div><div class="ld-txt">Heating up the fryer…</div></div>
 <div id="progress"></div>
 
 <div id="site-header"></div>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css">
 <section class="oflow"><div class="wrap">
-<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:10px"><h1 style="font-size:clamp(2rem,4vw,2.8rem)">Order <span class="hl">Hy Fun</span></h1><span id="who"></span></div>
+<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:10px"><h1 style="font-size:clamp(2rem,4vw,2.8rem)">Order <span class="hl">RT FOOD</span></h1><span id="who"></span></div>
 <div class="stepper"><div class="sp" data-s="1"><i>👤</i><span>Login</span></div><div class="sp" data-s="2"><i>🍟</i><span>Menu</span></div><div class="sp" data-s="3"><i>🛒</i><span>Cart</span></div><div class="sp" data-s="4"><i>📍</i><span>Details</span></div><div class="sp" data-s="5"><i>💳</i><span>Payment</span></div><div class="sp" data-s="6"><i>🧾</i><span>Bill</span></div><div class="sp" data-s="7"><i>🏍️</i><span>Track</span></div></div>
 
-<div class="view" id="v-start"><div class="start"><div class="big">🍟</div><h2>Hungry for something crispy?</h2><p style="margin:12px 0 26px">Pick your favourites, choose a pack size from 200 g to 2.5 kg and get them delivered frozen-fresh — with live rider tracking.</p><button class="btn btn-y" id="startBtn">Start ordering →</button>
-<div style="margin-top:34px;text-align:left"><h3 style="margin-bottom:10px">📍 Track an order</h3><form id="trackForm" style="display:flex;gap:10px"><input id="trackId" placeholder="Enter order number e.g. HF241024-AB12C"><button class="btn btn-dark">Track</button></form><h3 style="margin:24px 0 10px">Your recent orders</h3><div class="myorders" id="myorders"></div></div></div></div>
+<div class="view" id="v-start"><div class="start"><div class="big">🍟</div><h2>Hungry for something crispy?</h2><p style="margin:12px 0 26px">Pick your favourites, choose the pack size that suits you and get them delivered frozen-fresh — with live rider tracking.</p><button class="btn btn-y" id="startBtn">Start ordering →</button>
+<div style="margin-top:34px;text-align:left"><h3 style="margin-bottom:10px">📍 Track an order</h3><form id="trackForm" style="display:flex;gap:10px"><input id="trackId" placeholder="Enter order number e.g. RT241024-AB12C"><button class="btn btn-dark">Track</button></form><h3 style="margin:24px 0 10px">Your recent orders</h3><div class="myorders" id="myorders"></div></div></div></div>
 
 <div class="view" id="v-auth"><div class="auth"><div class="tabs" id="authTabs"><button data-m="login" class="on">Login</button><button data-m="signup">Sign up</button></div>
 <form class="form" id="authForm"><input class="signup-only" name="name" placeholder="Full name"><input id="aId" name="id" placeholder="Email or phone number" required><input class="signup-only" name="phone" placeholder="Mobile number (10 digits)" inputmode="numeric" maxlength="10"><input name="pass" type="password" placeholder="Password" required><div class="err" id="authErr"></div><button class="btn btn-dark btn-block" id="authBtn">Login</button></form>

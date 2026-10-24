@@ -1,50 +1,50 @@
 /* ============================================================
-   HY FUN — core: loader, header/footer, storage, cart, toast, reveal
+   RT FOOD — core: loader, header/footer, storage, cart, toast, reveal
    ============================================================ */
 (function () {
   const $ = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => [...r.querySelectorAll(s)];
-  HF.$ = $; HF.$$ = $$;
-  HF.rupee = n => '₹' + Number(n).toLocaleString('en-IN');
+  RT.$ = $; RT.$$ = $$;
+  RT.rupee = n => '₹' + Number(n).toLocaleString('en-IN');
 
   /* ---------- storage (JSON in localStorage, synced across tabs) ---------- */
-  HF.store = {
-    get(k, d) { try { const v = localStorage.getItem('hyfun_' + k); return v ? JSON.parse(v) : d; } catch (e) { return d; } },
-    set(k, v) { try { localStorage.setItem('hyfun_' + k, JSON.stringify(v)); } catch (e) {} document.dispatchEvent(new CustomEvent('hf:update', { detail: k })); },
-    del(k) { try { localStorage.removeItem('hyfun_' + k); } catch (e) {} document.dispatchEvent(new CustomEvent('hf:update', { detail: k })); }
+  RT.store = {
+    get(k, d) { try { const v = localStorage.getItem('rtfood_' + k); return v ? JSON.parse(v) : d; } catch (e) { return d; } },
+    set(k, v) { try { localStorage.setItem('rtfood_' + k, JSON.stringify(v)); } catch (e) {} document.dispatchEvent(new CustomEvent('hf:update', { detail: k })); },
+    del(k) { try { localStorage.removeItem('rtfood_' + k); } catch (e) {} document.dispatchEvent(new CustomEvent('hf:update', { detail: k })); }
   };
-  window.addEventListener('storage', e => e.key && e.key.startsWith('hyfun_') && document.dispatchEvent(new CustomEvent('hf:update', { detail: e.key.slice(6) })));
+  window.addEventListener('storage', e => e.key && e.key.startsWith('rtfood_') && document.dispatchEvent(new CustomEvent('hf:update', { detail: e.key.slice(7) })));
 
   /* ---------- cart ---------- */
-  HF.cart = {
-    items() { return HF.store.get('cart', []); },
+  RT.cart = {
+    items() { return RT.store.get('cart', []); },
     count() { return this.items().reduce((a, i) => a + i.qty, 0); },
     add(pid, size, qty = 1) {
       const c = this.items(); const f = c.find(i => i.pid === pid && i.size === size);
-      f ? f.qty += qty : c.push({ pid, size, qty }); HF.store.set('cart', c);
+      f ? f.qty += qty : c.push({ pid, size, qty }); RT.store.set('cart', c);
     },
     setQty(pid, size, qty) {
       let c = this.items(); const f = c.find(i => i.pid === pid && i.size === size);
-      if (f) f.qty = qty; c = c.filter(i => i.qty > 0); HF.store.set('cart', c);
+      if (f) f.qty = qty; c = c.filter(i => i.qty > 0); RT.store.set('cart', c);
     },
-    clear() { HF.store.set('cart', []); },
-    lines() { return this.items().map(i => { const p = HF.PRODUCTS.find(x => x.id === i.pid); return p ? { ...i, p, unit: HF.price(p, i.size), total: HF.price(p, i.size) * i.qty } : null; }).filter(Boolean); },
+    clear() { RT.store.set('cart', []); },
+    lines() { return this.items().map(i => { const p = RT.PRODUCTS.find(x => x.id === i.pid); return p ? { ...i, p, unit: RT.price(p, i.size), total: RT.price(p, i.size) * i.qty } : null; }).filter(Boolean); },
     totals(couponCode) {
       const lines = this.lines(); const sub = lines.reduce((a, l) => a + l.total, 0);
-      let discount = 0, ship = sub === 0 || sub >= HF.FREE_DELIVERY_ABOVE ? 0 : HF.DELIVERY_FEE; let cp = HF.COUPONS[couponCode];
+      let discount = 0, ship = sub === 0 || sub >= RT.FREE_DELIVERY_ABOVE ? 0 : RT.DELIVERY_FEE; let cp = RT.COUPONS[couponCode];
       if (cp && sub >= cp.min) {
         if (cp.type === 'flat') discount = cp.value;
         if (cp.type === 'pct') discount = Math.min(Math.round(sub * cp.value / 100), cp.max);
         if (cp.type === 'ship') ship = 0;
       } else cp = null;
       discount = Math.min(discount, sub);
-      const taxable = sub - discount, gst = Math.round(taxable * HF.GST_RATE);
+      const taxable = sub - discount, gst = Math.round(taxable * RT.GST_RATE);
       return { lines, sub, discount, ship, gst, taxable, total: taxable + gst + ship, coupon: cp ? couponCode : null };
     }
   };
 
   /* ---------- toast ---------- */
-  HF.toast = (msg, icon = '✅') => {
+  RT.toast = (msg, icon = '✅') => {
     let w = $('#toasts'); if (!w) { w = document.createElement('div'); w.id = 'toasts'; document.body.appendChild(w); }
     const t = document.createElement('div'); t.className = 'toast'; t.innerHTML = `<span>${icon}</span>${msg}`; w.appendChild(t);
     setTimeout(() => t.classList.add('out'), 2600); setTimeout(() => t.remove(), 3000);
@@ -57,7 +57,7 @@
   const hd = $('#site-header');
   if (hd) hd.outerHTML = `
   <header class="nav" id="nav"><div class="wrap nav-in">
-    <a href="index.html" class="brand" aria-label="Hy Fun home"><img src="assets/image/logo.png" alt="Hy Fun logo"></a>
+    <a href="index.html" class="brand" aria-label="RT FOOD home"><img src="assets/image/logo.png" alt="RT FOOD logo"></a>
     <nav class="links" id="links">${NAV.map(n => `<a href="${n[0]}" class="${active(n[0])}">${n[1]}</a>`).join('')}
       <a href="order.html" class="btn btn-sm btn-dark m-only">Order Now</a></nav>
     <div class="nav-actions">
@@ -69,19 +69,20 @@
   if (ft) ft.outerHTML = `
   <footer class="footer"><div class="wrap">
     <div class="f-grid">
-      <div><img src="assets/image/logo.png" alt="Hy Fun" class="f-logo"><p>Frozen Snacks &amp; French Fries — made from farm-fresh potatoes, loved in 45+ countries.</p>
+      <div><img src="assets/image/logo.png" alt="RT FOOD" class="f-logo"><p>Frozen Snacks &amp; French Fries — made from farm-fresh potatoes, loved in 45+ countries.</p>
         <div class="socials"><a href="#" aria-label="Facebook">f</a><a href="#" aria-label="LinkedIn">in</a><a href="#" aria-label="Instagram">◎</a><a href="Recipes.html" aria-label="YouTube">▶</a></div></div>
       <div><h4>Explore</h4>${NAV.slice(0, 5).map(n => `<a href="${n[0]}">${n[1]}</a>`).join('')}<a href="order.html">Order Now</a></div>
       <div><h4>Offices</h4><p><b>Corporate:</b> The Acropolis Mall, Block C, 3rd Floor, Thaltej, Ahmedabad – 380059</p><p><b>Plant:</b> Ganeshpura, Mehsana–Ahmedabad Highway, Mehsana – 384450</p><p><b>Sales:</b> COWRKS, DLF Cyber City, Gurugram – 122002</p></div>
-      <div><h4>Contact</h4><p>📞 <a href="tel:+917575002999">+91 75750 02999</a></p><p>✉️ <a href="mailto:sales@hyfunfoods.com">sales@hyfunfoods.com</a></p><p>✉️ <a href="mailto:info@hyfunfoods.com">info@hyfunfoods.com</a></p>
+      <div><h4>Contact</h4><p>📞 <a href="tel:+917861976128">+91 78619 76128</a></p><p>✉️ Enquiries: <a href="mailto:about@hyfunfoods.com">about@hyfunfoods.com</a></p><p>🛒 Orders: <a href="mailto:sales@hyfunfoods.com">sales@hyfunfoods.com</a></p>
         <div class="certs"><img src="assets/image/fssai.jpeg" alt="FSSAI"><img src="assets/image/Kosher.png" alt="Kosher"><img src="assets/image/sedex.png" alt="Sedex"><img src="assets/image/brc.jpg" alt="BRC"></div></div>
     </div>
-    <div class="f-bottom"><span>© ${new Date().getFullYear()} Hy Fun. All rights reserved.</span><span>Designed &amp; Developed by <b>RT1504</b></span></div>
+    <div class="f-bottom"><span>© ${new Date().getFullYear()} RT FOOD. All rights reserved.</span><span>Designed &amp; Developed by <b>RT1504</b></span></div>
+    <p class="disc">⚠️ This website is made for educational purposes only. No real products are sold, paid for or delivered.</p>
   </div></footer>
   <button class="to-top" id="toTop" aria-label="Back to top">↑</button>`;
 
   /* ---------- cart badge (live) ---------- */
-  const badge = () => { const n = HF.cart.count(), b = $('#cartCount'); if (b) { b.textContent = n; b.classList.toggle('on', n > 0); b.classList.remove('pop'); void b.offsetWidth; b.classList.add('pop'); } };
+  const badge = () => { const n = RT.cart.count(), b = $('#cartCount'); if (b) { b.textContent = n; b.classList.toggle('on', n > 0); b.classList.remove('pop'); void b.offsetWidth; b.classList.add('pop'); } };
   document.addEventListener('hf:update', badge);
 
   /* ---------- loader ---------- */
@@ -90,11 +91,6 @@
   document.readyState === 'complete' ? hide() : window.addEventListener('load', hide);
   setTimeout(hide, 4000);
   window.addEventListener('pageshow', e => { if (e.persisted && loader) { loader.style.display = 'none'; document.body.classList.remove('loading'); } });
-  document.addEventListener('click', e => {           // loader between pages
-    const a = e.target.closest('a[href]'); if (!a || !loader) return; const h = a.getAttribute('href');
-    if (a.target || e.metaKey || e.ctrlKey || /^(#|mailto|tel|http|javascript)/.test(h) || a.hasAttribute('download')) return;
-    e.preventDefault(); loader.style.display = ''; loader.classList.remove('done'); loader.classList.add('quick'); setTimeout(() => location.href = h, 450);
-  });
 
   document.addEventListener('DOMContentLoaded', () => {
     badge();
