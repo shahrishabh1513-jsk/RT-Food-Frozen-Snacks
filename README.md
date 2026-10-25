@@ -77,7 +77,7 @@
 <tr>
 <td align="center">
 <a href="https://shahrishabh1513-jsk.github.io/RT-Food-Frozen-Snacks/" target="_blank">
-<img src="https://s.wordpress.com/mshots/v1/https%3A%2F%2Fshahrishabh1513-jsk.github.io%2FRT-Food-Frozen-Snacks%2F?w=1400" width="100%" alt="RT FOOD home page"/>
+<img src="https://github.com/user-attachments/assets/43c30439-92c5-4cc1-b23e-71aebf448d87" width="100%" alt="RT FOOD home page"/>
 </a>
 </td>
 </tr>
