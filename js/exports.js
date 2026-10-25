@@ -1,4 +1,3 @@
-/* Exports — interactive world map with every destination */
 document.addEventListener('DOMContentLoaded', () => {
   const $ = RT.$, box = $('#worldmap'); if (typeof L === 'undefined') { box.innerHTML = '<p class="empty">Map needs an internet connection to load.</p>'; return; }
   const hub = [23.59, 72.37];

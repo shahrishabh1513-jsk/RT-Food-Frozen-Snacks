@@ -1,4 +1,3 @@
-/* Home — featured products, recipe teaser, brand marquees, live stats */
 document.addEventListener('DOMContentLoaded', () => {
   const $ = RT.$, feat = $('#featured');
   const list = RT.PRODUCTS.filter(p => p.tag === 'Bestseller').slice(0, 8);

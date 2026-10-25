@@ -1,6 +1,3 @@
-/* ============================================================
-   RT FOOD — PDF generators (recipe card + tax invoice) using jsPDF
-   ============================================================ */
 RT.pdf = (() => {
   const Y = [255, 196, 0], INK = [38, 38, 38], RED = [255, 77, 46], MUTE = [110, 104, 90];
   const mk = () => { const { jsPDF } = window.jspdf; return new jsPDF({ unit: 'mm', format: 'a4' }); };

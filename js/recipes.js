@@ -1,4 +1,3 @@
-/* Recipes — video grid, filters, in-page player with ingredients/steps, PDF download */
 document.addEventListener('DOMContentLoaded', () => {
   const $ = RT.$, grid = $('#vgrid'), modal = $('#modal'); const f = { q: '', cat: 'all' };
   $('#rCat').innerHTML = '<option value="all">All Recipe Types</option>' + [...new Set(RT.RECIPES.map(r => r.cat))].map(c => `<option>${c}</option>`).join('');

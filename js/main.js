@@ -1,6 +1,3 @@
-/* ============================================================
-   RT FOOD — core: loader, header/footer, storage, cart, toast, reveal
-   ============================================================ */
 (function () {
   const $ = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => [...r.querySelectorAll(s)];

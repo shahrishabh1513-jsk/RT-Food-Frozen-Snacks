@@ -1,6 +1,3 @@
-/* ============================================================
-   RT FOOD — shared product card + filters (home, products, order)
-   ============================================================ */
 RT.IMG_OVERRIDE = {};   // e.g. { 'french-fries': 'assets/image/my-fries.jpg' }  → own photo per product
 RT.productCard = (p, size = '500g', i = 0) => {
   if (!p.sizes.includes(size)) size = p.sizes.includes('500g') ? '500g' : p.sizes[0];
