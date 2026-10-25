@@ -1,67 +1,231 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Order Now | RT FOOD – Frozen Snacks &amp; French Fries</title>
-<meta name="description" content="Order RT FOOD frozen snacks online — choose pack sizes, apply coupons, pay by UPI, card or COD and track your rider live.">
-<meta name="theme-color" content="#FFC400">
-<link rel="icon" type="image/png" href="assets/image/favicon.png">
-<link rel="stylesheet" href="css/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Now | RT FOOD – Frozen Snacks &amp; French Fries</title>
+    <meta name="description"
+        content="Order RT FOOD frozen snacks online — choose pack sizes, apply coupons, pay by UPI, card or COD and track your rider live.">
+    <meta name="theme-color" content="#FFC400">
+    <link rel="icon" type="image/png" href="assets/image/favicon.png">
+    <link rel="stylesheet" href="css/style.css">
 
 </head>
+
 <body class="loading">
 
-<div id="loader" aria-label="Loading"><span class="ld-fry" style="left:8%;animation-delay:0s">🍟</span><span class="ld-fry" style="left:24%;animation-delay:0.7s">🥔</span><span class="ld-fry" style="left:41%;animation-delay:1.3s">🍟</span><span class="ld-fry" style="left:63%;animation-delay:0.3s">🥔</span><span class="ld-fry" style="left:80%;animation-delay:1s">🍟</span><span class="ld-fry" style="left:92%;animation-delay:1.7s">🥔</span><div class="ld-ring"></div><img class="ld-logo" src="assets/image/logo.png" alt="RT FOOD"><div class="ld-bar"><i></i></div><div class="ld-txt">Heating up the fryer…</div></div>
-<div id="progress"></div>
+    <div id="loader" aria-label="Loading"><span class="ld-fry" style="left:8%;animation-delay:0s">🍟</span><span
+            class="ld-fry" style="left:24%;animation-delay:0.7s">🥔</span><span class="ld-fry"
+            style="left:41%;animation-delay:1.3s">🍟</span><span class="ld-fry"
+            style="left:63%;animation-delay:0.3s">🥔</span><span class="ld-fry"
+            style="left:80%;animation-delay:1s">🍟</span><span class="ld-fry"
+            style="left:92%;animation-delay:1.7s">🥔</span>
+        <div class="ld-ring"></div><img class="ld-logo" src="assets/image/logo.png" alt="RT FOOD">
+        <div class="ld-bar"><i></i></div>
+        <div class="ld-txt">Heating up the fryer…</div>
+    </div>
+    <div id="progress"></div>
 
-<div id="site-header"></div>
+    <div id="site-header"></div>
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css">
-<section class="oflow"><div class="wrap">
-<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:10px"><h1 style="font-size:clamp(2rem,4vw,2.8rem)">Order <span class="hl">RT FOOD</span></h1><span id="who"></span></div>
-<div class="stepper"><div class="sp" data-s="1"><i>👤</i><span>Login</span></div><div class="sp" data-s="2"><i>🍟</i><span>Menu</span></div><div class="sp" data-s="3"><i>🛒</i><span>Cart</span></div><div class="sp" data-s="4"><i>📍</i><span>Details</span></div><div class="sp" data-s="5"><i>💳</i><span>Payment</span></div><div class="sp" data-s="6"><i>🧾</i><span>Bill</span></div><div class="sp" data-s="7"><i>🏍️</i><span>Track</span></div></div>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css">
+    <section class="oflow">
+        <div class="wrap">
+            <div
+                style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:10px">
+                <h1 style="font-size:clamp(2rem,4vw,2.8rem)">Order <span class="hl">RT FOOD</span></h1><span
+                    id="who"></span>
+            </div>
+            <div class="stepper">
+                <div class="sp" data-s="1"><i>👤</i><span>Login</span></div>
+                <div class="sp" data-s="2"><i>🍟</i><span>Menu</span></div>
+                <div class="sp" data-s="3"><i>🛒</i><span>Cart</span></div>
+                <div class="sp" data-s="4"><i>📍</i><span>Details</span></div>
+                <div class="sp" data-s="5"><i>💳</i><span>Payment</span></div>
+                <div class="sp" data-s="6"><i>🧾</i><span>Bill</span></div>
+                <div class="sp" data-s="7"><i>🏍️</i><span>Track</span></div>
+            </div>
 
-<div class="view" id="v-start"><div class="start"><div class="big">🍟</div><h2>Hungry for something crispy?</h2><p style="margin:12px 0 26px">Pick your favourites, choose the pack size that suits you and get them delivered frozen-fresh — with live rider tracking.</p><button class="btn btn-y" id="startBtn">Start ordering →</button>
-<div style="margin-top:34px;text-align:left"><h3 style="margin-bottom:10px">📍 Track an order</h3><form id="trackForm" style="display:flex;gap:10px"><input id="trackId" placeholder="Enter order number e.g. RT241024-AB12C"><button class="btn btn-dark">Track</button></form><h3 style="margin:24px 0 10px">Your recent orders</h3><div class="myorders" id="myorders"></div></div></div></div>
+            <div class="view" id="v-start">
+                <div class="start">
+                    <div class="big">🍟</div>
+                    <h2>Hungry for something crispy?</h2>
+                    <p style="margin:12px 0 26px">Pick your favourites, choose the pack size that suits you and get them
+                        delivered frozen-fresh — with live rider tracking.</p><button class="btn btn-y"
+                        id="startBtn">Start ordering →</button>
+                    <div style="margin-top:34px;text-align:left">
+                        <h3 style="margin-bottom:10px">📍 Track an order</h3>
+                        <form id="trackForm" style="display:flex;gap:10px"><input id="trackId"
+                                placeholder="Enter order number e.g. RT241024-AB12C"><button
+                                class="btn btn-dark">Track</button></form>
+                        <h3 style="margin:24px 0 10px">Your recent orders</h3>
+                        <div class="myorders" id="myorders"></div>
+                    </div>
+                </div>
+            </div>
 
-<div class="view" id="v-auth"><div class="auth"><div class="tabs" id="authTabs"><button data-m="login" class="on">Login</button><button data-m="signup">Sign up</button></div>
-<form class="form" id="authForm"><input class="signup-only" name="name" placeholder="Full name"><input id="aId" name="id" placeholder="Email or phone number" required><input class="signup-only" name="phone" placeholder="Mobile number (10 digits)" inputmode="numeric" maxlength="10"><input name="pass" type="password" placeholder="Password" required><div class="err" id="authErr"></div><button class="btn btn-dark btn-block" id="authBtn">Login</button></form>
-<p class="center" style="margin-top:16px;font-size:.88rem">or <a href="#" id="guestBtn" style="text-decoration:underline;font-weight:600">continue as guest</a></p><p class="center" style="font-size:.75rem;color:var(--mute);margin-top:10px">Demo login — accounts are stored only in this browser.</p></div></div>
+            <div class="view" id="v-auth">
+                <div class="auth">
+                    <div class="tabs" id="authTabs"><button data-m="login" class="on">Login</button><button
+                            data-m="signup">Sign up</button></div>
+                    <form class="form" id="authForm"><input class="signup-only" name="name"
+                            placeholder="Full name"><input id="aId" name="id" placeholder="Email or phone number"
+                            required><input class="signup-only" name="phone" placeholder="Mobile number (10 digits)"
+                            inputmode="numeric" maxlength="10"><input name="pass" type="password" placeholder="Password"
+                            required>
+                        <div class="err" id="authErr"></div><button class="btn btn-dark btn-block"
+                            id="authBtn">Login</button>
+                    </form>
+                    <p class="center" style="margin-top:16px;font-size:.88rem">or <a href="#" id="guestBtn"
+                            style="text-decoration:underline;font-weight:600">continue as guest</a></p>
+                    <p class="center" style="font-size:.75rem;color:var(--mute);margin-top:10px">Demo login — accounts
+                        are stored only in this browser.</p>
+                </div>
+            </div>
 
-<div class="view" id="v-menu"><div class="toolbar" style="top:80px"><div class="field" style="flex:2"><label for="mQ">Search</label><input id="mQ" placeholder="🔍 Search the menu…"></div><div class="field"><label for="mCat">Category</label><select id="mCat"></select></div><span class="count" id="mcount"></span></div><div class="pgrid" id="mgrid"></div></div>
+            <div class="view" id="v-menu">
+                <div class="toolbar" style="top:80px">
+                    <div class="field" style="flex:2"><label for="mQ">Search</label><input id="mQ"
+                            placeholder="🔍 Search the menu…"></div>
+                    <div class="field"><label for="mCat">Category</label><select id="mCat"></select></div><span
+                        class="count" id="mcount"></span>
+                </div>
+                <div class="pgrid" id="mgrid"></div>
+            </div>
 
-<div class="view" id="v-cart"><div class="cols"><div class="box"><h3>🛒 Your cart</h3><div id="cartList"></div><a href="#menu" class="btn btn-line btn-sm mt">← Add more items</a></div>
-<div class="box"><h3>Order summary</h3><div class="coupon"><input id="cpIn" placeholder="Coupon code"><button class="btn btn-dark btn-sm" id="cpApply">Apply</button></div><div id="cpMsg" style="font-size:.85rem;font-weight:500"></div><div class="cp-list" id="cpList"></div><div id="cartSum" style="margin-top:14px"></div><button class="btn btn-y btn-block mt" id="toDetails">Confirm order → Delivery details</button></div></div></div>
+            <div class="view" id="v-cart">
+                <div class="cols">
+                    <div class="box">
+                        <h3>🛒 Your cart</h3>
+                        <div id="cartList"></div><a href="#menu" class="btn btn-line btn-sm mt">← Add more items</a>
+                    </div>
+                    <div class="box">
+                        <h3>Order summary</h3>
+                        <div class="coupon"><input id="cpIn" placeholder="Coupon code"><button
+                                class="btn btn-dark btn-sm" id="cpApply">Apply</button></div>
+                        <div id="cpMsg" style="font-size:.85rem;font-weight:500"></div>
+                        <div class="cp-list" id="cpList"></div>
+                        <div id="cartSum" style="margin-top:14px"></div><button class="btn btn-y btn-block mt"
+                            id="toDetails">Confirm order → Delivery details</button>
+                    </div>
+                </div>
+            </div>
 
-<div class="view" id="v-details"><div class="cols"><div class="box"><h3>📍 Customer details</h3><form class="form" id="detForm"><div class="row"><input id="d_name" name="name" placeholder="Full name" required><input id="d_phone" name="phone" placeholder="Mobile number" inputmode="numeric" maxlength="10" required></div><input id="d_email" name="email" type="email" placeholder="Email (optional, for bill)"><textarea id="d_address" name="address" rows="3" placeholder="House no., street, area" required></textarea><div class="row"><input id="d_landmark" name="landmark" placeholder="Landmark (optional)"><input id="d_city" name="city" placeholder="City" required></div><input id="d_pin" name="pin" placeholder="PIN code" inputmode="numeric" maxlength="6" required><div class="err" id="detErr"></div><div style="display:flex;gap:10px;flex-wrap:wrap"><a href="#cart" class="btn btn-line">← Back</a><button class="btn btn-y">Continue to payment →</button></div></form></div><div class="box"><h3>Order summary</h3><div id="detSum"></div></div></div></div>
+            <div class="view" id="v-details">
+                <div class="cols">
+                    <div class="box">
+                        <h3>📍 Customer details</h3>
+                        <form class="form" id="detForm">
+                            <div class="row"><input id="d_name" name="name" placeholder="Full name" required><input
+                                    id="d_phone" name="phone" placeholder="Mobile number" inputmode="numeric"
+                                    maxlength="10" required></div><input id="d_email" name="email" type="email"
+                                placeholder="Email (optional, for bill)"><textarea id="d_address" name="address"
+                                rows="3" placeholder="House no., street, area" required></textarea>
+                            <div class="row"><input id="d_landmark" name="landmark"
+                                    placeholder="Landmark (optional)"><input id="d_city" name="city" placeholder="City"
+                                    required></div><input id="d_pin" name="pin" placeholder="PIN code"
+                                inputmode="numeric" maxlength="6" required>
+                            <div class="err" id="detErr"></div>
+                            <div style="display:flex;gap:10px;flex-wrap:wrap"><a href="#cart" class="btn btn-line">←
+                                    Back</a><button class="btn btn-y">Continue to payment →</button></div>
+                        </form>
+                    </div>
+                    <div class="box">
+                        <h3>Order summary</h3>
+                        <div id="detSum"></div>
+                    </div>
+                </div>
+            </div>
 
-<div class="view" id="v-pay"><div class="cols"><div class="box"><h3>💳 Payment <small style="font-weight:400;color:var(--mute)">· Order <b id="payOrderNo"></b></small></h3><p id="payTo" style="background:var(--cream);padding:14px 18px;border-radius:16px;margin-bottom:18px;font-size:.9rem"></p>
-<div class="pay-opts"><label><input type="radio" name="pm" value="upi" checked><b>📱</b>UPI / QR</label><label><input type="radio" name="pm" value="card"><b>💳</b>Card</label><label><input type="radio" name="pm" value="cod"><b>💵</b>Cash on Delivery</label></div>
-<div class="ppanel" data-m="upi"><div class="qrbox"><b>Scan with any UPI app</b><div id="qr"></div><p>Pay exactly <b id="payTotal"></b> · QR refreshes in <span class="timer" id="qrTime">5:00</span></p><a id="upiLink" class="btn btn-line btn-sm" href="#">Open in UPI app</a></div></div>
-<div class="ppanel form" data-m="card" style="display:none"><input id="cardNo" placeholder="Card number" inputmode="numeric"><input id="cardName" placeholder="Name on card"><div class="row"><input id="cardExp" placeholder="MM/YY" inputmode="numeric"><input id="cardCvv" placeholder="CVV" type="password" maxlength="4" inputmode="numeric"></div><small style="color:var(--mute)">Demo checkout — no real charge. Try 4242 4242 4242 4242, any future date.</small></div>
-<div class="ppanel" data-m="cod" style="display:none"><div class="qrbox">💵 Pay in cash to the rider when your order arrives. Please keep the exact amount ready.</div></div>
-<div class="err" id="payErr" style="margin-top:10px"></div><button class="btn btn-y btn-block mt" id="payBtn"></button><a href="#details" class="btn btn-line btn-block mt btn-sm">← Back to details</a></div><div class="box"><h3>Order summary</h3><div id="paySum"></div></div></div></div>
+            <div class="view" id="v-pay">
+                <div class="cols">
+                    <div class="box">
+                        <h3>💳 Payment <small style="font-weight:400;color:var(--mute)">· Order <b
+                                    id="payOrderNo"></b></small></h3>
+                        <p id="payTo"
+                            style="background:var(--cream);padding:14px 18px;border-radius:16px;margin-bottom:18px;font-size:.9rem">
+                        </p>
+                        <div class="pay-opts"><label><input type="radio" name="pm" value="upi" checked><b>📱</b>UPI /
+                                QR</label><label><input type="radio" name="pm"
+                                    value="card"><b>💳</b>Card</label><label><input type="radio" name="pm"
+                                    value="cod"><b>💵</b>Cash on Delivery</label></div>
+                        <div class="ppanel" data-m="upi">
+                            <div class="qrbox"><b>Scan with any UPI app</b>
+                                <div id="qr"></div>
+                                <p>Pay exactly <b id="payTotal"></b> · QR refreshes in <span class="timer"
+                                        id="qrTime">5:00</span></p><a id="upiLink" class="btn btn-line btn-sm"
+                                    href="#">Open in UPI app</a>
+                            </div>
+                        </div>
+                        <div class="ppanel form" data-m="card" style="display:none"><input id="cardNo"
+                                placeholder="Card number" inputmode="numeric"><input id="cardName"
+                                placeholder="Name on card">
+                            <div class="row"><input id="cardExp" placeholder="MM/YY" inputmode="numeric"><input
+                                    id="cardCvv" placeholder="CVV" type="password" maxlength="4" inputmode="numeric">
+                            </div><small style="color:var(--mute)">Demo checkout — no real charge. Try 4242 4242 4242
+                                4242, any future date.</small>
+                        </div>
+                        <div class="ppanel" data-m="cod" style="display:none">
+                            <div class="qrbox">💵 Pay in cash to the rider when your order arrives. Please keep the
+                                exact amount ready.</div>
+                        </div>
+                        <div class="err" id="payErr" style="margin-top:10px"></div><button
+                            class="btn btn-y btn-block mt" id="payBtn"></button><a href="#details"
+                            class="btn btn-line btn-block mt btn-sm">← Back to details</a>
+                    </div>
+                    <div class="box">
+                        <h3>Order summary</h3>
+                        <div id="paySum"></div>
+                    </div>
+                </div>
+            </div>
 
-<div class="view" id="v-bill"><div id="billWrap"></div></div>
+            <div class="view" id="v-bill">
+                <div id="billWrap"></div>
+            </div>
 
-<div class="view" id="v-track"><div class="eta"><div><small style="opacity:.7">Order <span id="tOrder"></span></small><br><span id="tStatus" style="font-weight:600"></span></div><div style="text-align:right"><small style="opacity:.7">Arriving in (demo time)</small><br><b id="tEta">--</b></div></div>
-<div class="pbar"><i id="tBar"></i></div><div class="track-grid"><div class="box"><h3>Live status</h3><ul class="tsteps" id="tSteps"></ul><hr style="border:0;border-top:1px dashed var(--line);margin:8px 0 14px"><p><b>📍 Delivering to</b><br><span id="tAddr" style="font-size:.9rem"></span></p><p style="margin-top:10px"><b id="tAmt"></b> · <span id="tDist"></span></p><div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px"><a class="btn btn-dark btn-sm" id="tBill" href="#">🧾 View bill</a><a class="btn btn-line btn-sm" href="#start">All orders</a></div></div>
-<div><div class="map" id="tmap" style="height:540px"></div><p id="tMsg" style="text-align:center;font-size:.85rem;color:var(--mute);margin-top:10px"></p></div></div></div>
-</div></section>
-<button class="fab" id="fab">🛒 <span id="fabTxt">View Cart</span></button>
+            <div class="view" id="v-track">
+                <div class="eta">
+                    <div><small style="opacity:.7">Order <span id="tOrder"></span></small><br><span id="tStatus"
+                            style="font-weight:600"></span></div>
+                    <div style="text-align:right"><small style="opacity:.7">Arriving in (demo time)</small><br><b
+                            id="tEta">--</b></div>
+                </div>
+                <div class="pbar"><i id="tBar"></i></div>
+                <div class="track-grid">
+                    <div class="box">
+                        <h3>Live status</h3>
+                        <ul class="tsteps" id="tSteps"></ul>
+                        <hr style="border:0;border-top:1px dashed var(--line);margin:8px 0 14px">
+                        <p><b>📍 Delivering to</b><br><span id="tAddr" style="font-size:.9rem"></span></p>
+                        <p style="margin-top:10px"><b id="tAmt"></b> · <span id="tDist"></span></p>
+                        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px"><a class="btn btn-dark btn-sm"
+                                id="tBill" href="#">🧾 View bill</a><a class="btn btn-line btn-sm" href="#start">All
+                                orders</a></div>
+                    </div>
+                    <div>
+                        <div class="map" id="tmap" style="height:540px"></div>
+                        <p id="tMsg" style="text-align:center;font-size:.85rem;color:var(--mute);margin-top:10px"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <button class="fab" id="fab">🛒 <span id="fabTxt">View Cart</span></button>
 
 
-<div id="site-footer"></div>
+    <div id="site-footer"></div>
 
-<script src="js/data.js"></script>
-<script src="js/logo.js"></script>
-<script src="js/main.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-<script src="js/pdf.js"></script>
-<script src="js/shop.js"></script>
-<script src="js/order.js"></script>
+    <script src="js/data.js"></script>
+    <script src="js/logo.js"></script>
+    <script src="js/main.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="js/pdf.js"></script>
+    <script src="js/shop.js"></script>
+    <script src="js/order.js"></script>
 </body>
+
 </html>
