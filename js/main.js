@@ -69,7 +69,7 @@
       <div><img src="assets/image/logo.png" alt="RT FOOD" class="f-logo"><p>Frozen Snacks &amp; French Fries — made from farm-fresh potatoes, loved in 45+ countries.</p>
         <div class="socials"><a href="#" aria-label="Facebook">f</a><a href="#" aria-label="LinkedIn">in</a><a href="#" aria-label="Instagram">◎</a><a href="Recipes.html" aria-label="YouTube">▶</a></div></div>
       <div><h4>Explore</h4>${NAV.slice(0, 5).map(n => `<a href="${n[0]}">${n[1]}</a>`).join('')}<a href="order.html">Order Now</a></div>
-      <div><h4>Offices</h4><p><b>Corporate:</b> The Acropolis Mall, Block C, 3rd Floor, Thaltej, Ahmedabad – 380059</p><p><b>Plant:</b> Ganeshpura, Mehsana–Ahmedabad Highway, Mehsana – 384450</p><p><b>Sales:</b> COWRKS, DLF Cyber City, Gurugram – 122002</p></div>
+      <div><h4>Offices</h4><p><b>Corporate:</b> Krishna Plaza opp. sumandeep collage, near suzlon company, Vadodara, Gujarat 391760</p><p><b>Plant:</b> Mehsana–Ahmedabad Highway, Mehsana – 384450</p><p><b>Sales:</b> COWRKS, DLF Cyber City, Gurugram – 122002</p></div>
       <div><h4>Contact</h4><p>📞 <a href="tel:+917861976128">+91 78619 76128</a></p><p>✉️ Enquiries: <a href="mailto:about@hyfunfoods.com">about@hyfunfoods.com</a></p><p>🛒 Orders: <a href="mailto:sales@hyfunfoods.com">sales@hyfunfoods.com</a></p>
         <div class="certs"><img src="assets/image/fssai.jpeg" alt="FSSAI"><img src="assets/image/Kosher.png" alt="Kosher"><img src="assets/image/sedex.png" alt="Sedex"><img src="assets/image/brc.jpg" alt="BRC"></div></div>
     </div>

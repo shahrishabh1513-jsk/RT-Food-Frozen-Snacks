@@ -1,40 +1,89 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Products | RT FOOD – Frozen Snacks &amp; French Fries</title>
-<meta name="description" content="Browse 50+ RT FOOD frozen snacks — French fries, hash browns, patties, pizzas, momos and more. Filter by category, pack size and type.">
-<meta name="theme-color" content="#FFC400">
-<link rel="icon" type="image/png" href="assets/image/favicon.png">
-<link rel="stylesheet" href="css/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products | RT FOOD – Frozen Snacks &amp; French Fries</title>
+    <meta name="description"
+        content="Browse 50+ RT FOOD frozen snacks — French fries, hash browns, patties, pizzas, momos and more. Filter by category, pack size and type.">
+    <meta name="theme-color" content="#FFC400">
+    <link rel="icon" type="image/png" href="assets/image/favicon.png">
+    <link rel="stylesheet" href="css/style.css">
 
 </head>
+
 <body class="">
 
 
-<div id="progress"></div>
+    <div id="progress"></div>
 
-<div id="site-header"></div>
+    <div id="site-header"></div>
 
-<section class="page-hero"><span class="floaty" style="left:6%;top:30%;animation-delay:0s">🍟</span><span class="floaty" style="left:88%;top:22%;animation-delay:-2s">🥔</span><span class="floaty" style="left:76%;top:70%;animation-delay:-4s">🧀</span><div class="wrap"><div class="crumbs"><a href="index.html">Home</a> / Products</div><h1>Our <span class="hl" style="background:linear-gradient(transparent 62%,#fff 62%)">full range</span></h1><p>From the classic French fry to puffets, pizzas and momos — pick your pack and order online.</p></div><div class="wave"><svg viewBox="0 0 1440 50" preserveAspectRatio="none"><path fill="#FFF9E3" d="M0 30 C240 60 480 0 720 25 C960 50 1200 10 1440 30 L1440 50 L0 50Z"/></svg></div></section>
-<section style="padding-top:50px"><div class="wrap">
-<div class="toolbar"><div class="field" style="flex:2"><label for="fQ">Search</label><input id="fQ" placeholder="🔍  Search fries, patties, momos…"></div>
-<div class="field"><label for="fCat">Category</label><select id="fCat"></select></div>
-<div class="field"><label for="fSize">Pack size</label><select id="fSize"><option value="all">All sizes</option><option>200g</option><option>500g</option><option>1kg</option><option>2.5kg</option><option>1 Pack</option><option>2 Packs</option><option>4 Packs</option></select></div>
-<div class="field"><label for="fTag">Type</label><select id="fTag"><option value="all">All types</option><option>Bestseller</option><option>New</option><option>Spicy</option><option>Kids Fav</option><option>Vrat Friendly</option></select></div>
-<div class="field"><label for="fSort">Sort by</label><select id="fSort"><option value="pop">Popular first</option><option value="low">Price: low to high</option><option value="high">Price: high to low</option><option value="az">Name: A to Z</option></select></div>
-<span class="count" id="pcount"></span></div>
-<div class="pgrid" id="pgrid"></div></div></section>
-<section class="bg-ink"><div class="wrap center"><h2>Need bulk, private label or export supply?</h2><p style="margin:12px auto 24px;max-width:560px">Our sales team handles restaurants, retailers and distributors worldwide.</p><a class="btn btn-y" href="connect.html">Contact sales</a> <a class="btn btn-line" style="color:#fff;border-color:#fff" href="Exports.html">Export enquiry</a></div></section>
+    <section class="page-hero"><span class="floaty" style="left:6%;top:30%;animation-delay:0s">🍟</span><span
+            class="floaty" style="left:88%;top:22%;animation-delay:-2s">🥔</span><span class="floaty"
+            style="left:76%;top:70%;animation-delay:-4s">🧀</span>
+        <div class="wrap">
+            <div class="crumbs"><a href="index.html">Home</a> / Products</div>
+            <h1>Our <span class="hl" style="background:linear-gradient(transparent 62%,#fff 62%)">full range</span></h1>
+            <p>From the classic French fry to puffets, pizzas and momos — pick your pack and order online.</p>
+        </div>
+        <div class="wave"><svg viewBox="0 0 1440 50" preserveAspectRatio="none">
+                <path fill="#FFF9E3" d="M0 30 C240 60 480 0 720 25 C960 50 1200 10 1440 30 L1440 50 L0 50Z" />
+            </svg></div>
+    </section>
+    <section style="padding-top:50px">
+        <div class="wrap">
+            <div class="toolbar">
+                <div class="field" style="flex:2"><label for="fQ">Search</label><input id="fQ"
+                        placeholder="🔍  Search fries, patties, momos…"></div>
+                <div class="field"><label for="fCat">Category</label><select id="fCat"></select></div>
+                <div class="field"><label for="fSize">Pack size</label><select id="fSize">
+                        <option value="all">All sizes</option>
+                        <option>200g</option>
+                        <option>500g</option>
+                        <option>1kg</option>
+                        <option>2.5kg</option>
+                        <option>1 Pack</option>
+                        <option>2 Packs</option>
+                        <option>4 Packs</option>
+                    </select></div>
+                <div class="field"><label for="fTag">Type</label><select id="fTag">
+                        <option value="all">All types</option>
+                        <option>Bestseller</option>
+                        <option>New</option>
+                        <option>Spicy</option>
+                        <option>Kids Fav</option>
+                        <option>Vrat Friendly</option>
+                    </select></div>
+                <div class="field"><label for="fSort">Sort by</label><select id="fSort">
+                        <option value="pop">Popular first</option>
+                        <option value="low">Price: low to high</option>
+                        <option value="high">Price: high to low</option>
+                        <option value="az">Name: A to Z</option>
+                    </select></div>
+                <span class="count" id="pcount"></span>
+            </div>
+            <div class="pgrid" id="pgrid"></div>
+        </div>
+    </section>
+    <section class="bg-ink">
+        <div class="wrap center">
+            <h2>Need bulk, private label or export supply?</h2>
+            <p style="margin:12px auto 24px;max-width:560px">Our sales team handles restaurants, retailers and
+                distributors worldwide.</p><a class="btn btn-y" href="connect.html">Contact sales</a> <a
+                class="btn btn-line" style="color:#fff;border-color:#fff" href="Exports.html">Export enquiry</a>
+        </div>
+    </section>
 
 
-<div id="site-footer"></div>
+    <div id="site-footer"></div>
 
-<script src="js/data.js"></script>
-<script src="js/logo.js"></script>
-<script src="js/main.js"></script>
-<script src="js/shop.js"></script>
-<script src="js/products.js"></script>
+    <script src="js/data.js"></script>
+    <script src="js/logo.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/shop.js"></script>
+    <script src="js/products.js"></script>
 </body>
+
 </html>

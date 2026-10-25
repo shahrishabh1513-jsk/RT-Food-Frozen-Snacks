@@ -2380,7 +2380,7 @@ textarea:focus {
    transition-delay: .4s
 }
 
-/* ---------- responsive ---------- */
+/*  responsive  */
 @media(max-width:1020px) {
    .g4 {
       grid-template-columns: repeat(2, 1fr)

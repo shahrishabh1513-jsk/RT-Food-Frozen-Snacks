@@ -8,7 +8,7 @@ RT.HUB = { name: 'RT FOOD Dispatch Hub, Thaltej, Ahmedabad', lat: 23.0507, lng: 
 /* ---------- Pack sizes (multiplier on the 500 g price) ---------- */
 RT.SIZES = { '200g': 0.42, '500g': 1, '1kg': 1.9, '2.5kg': 4.5, '1 Pack': 1, '2 Packs': 1.9, '4 Packs': 3.6 };
 
-/* ---------- Product images (files inside assets/image/) — edit a file name here to change a product photo ---------- */
+/*  Product images (files inside assets/image/) — edit a file name here to change a product photo */
 RT.IMAGES = {
   'French Fries': 'french_simple.jpg',
   'Super Crispy Fries': 'Classic ff.png',
