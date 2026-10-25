@@ -1,6 +1,3 @@
-/* ============================================================
-   RT FOOD — shared product card + filters (home, products, order)
-   ============================================================ */
 RT.IMG_OVERRIDE = {};   // e.g. { 'french-fries': 'assets/image/my-fries.jpg' }  → own photo per product
 RT.imgSrc = p => RT.IMG_OVERRIDE[p.id] || 'assets/image/' + encodeURIComponent(p.img);
 RT.imgFallback = (el, id) => {   // if a product photo is missing, show the category photo instead

@@ -1,7 +1,3 @@
-/* ============================================================
-   RT FOOD — shared data (products, recipes, export countries, coupons)
-   Edit prices, coupons and GST here — every page updates automatically.
-   ============================================================ */
 const RT = window.RT = {};
 RT.GST_RATE = 0.12;            // change to match your GST slab
 RT.FREE_DELIVERY_ABOVE = 499;  // free delivery above this subtotal

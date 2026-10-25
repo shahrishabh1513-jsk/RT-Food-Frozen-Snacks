@@ -1,8 +1,3 @@
-/* ============================================================
-   RT FOOD — Order flow
-   start → login/signup → menu → cart → details → payment → bill → live tracking
-   Everything persists in localStorage and syncs across tabs.
-   ============================================================ */
 document.addEventListener('DOMContentLoaded', () => {
   const $ = RT.$, $$ = RT.$$, R = RT.rupee, S = RT.store;
   const TRACK = { confirm: 10, pack: 28, pick: 42, ride: 100 };       // seconds — compressed demo timeline (edit freely)
