@@ -28,7 +28,7 @@
 <a href="https://github.com/shahrishabh1513-jsk/RT-Food-Frozen-Snacks"><img src="https://img.shields.io/badge/REPOSITORY-View_Code-0B1E5B?style=for-the-badge&logo=github&logoColor=white"/></a>
 <a href="https://github.com/shahrishabh1513-jsk/RT-Food-Frozen-Snacks/stargazers"><img src="https://img.shields.io/badge/⭐_STAR-Support_This_Repo-1D4ED8?style=for-the-badge"/></a>
 
-<br/><br/>
+<br/>
 
 <img src="https://img.shields.io/badge/COUNTRIES-45%2B-1D4ED8?style=for-the-badge&labelColor=0B1E5B"/>
 <img src="https://img.shields.io/badge/PRODUCTS-50%2B-FFC400?style=for-the-badge&labelColor=0B1E5B"/>
@@ -36,7 +36,7 @@
 <img src="https://img.shields.io/badge/READY_IN-3_Minutes-1D4ED8?style=for-the-badge&labelColor=0B1E5B"/>
 <img src="https://img.shields.io/badge/DIET-100%25_Vegetarian-FFC400?style=for-the-badge&labelColor=0B1E5B"/>
 
-<br/><br/>
+<br/>
 
 <img src="https://img.shields.io/badge/HTML5-E34F26?style=flat-square&logo=html5&logoColor=white"/>
 <img src="https://img.shields.io/badge/CSS3-1572B6?style=flat-square&logo=css3&logoColor=white"/>
@@ -90,7 +90,6 @@
 
 </div>
 
-> 💡 The preview is captured live by a free screenshot service. If it shows the "Heating up the fryer…" loading screen, refresh once and it fills in.
 
 <div align="center"><img src="https://capsule-render.vercel.app/api?type=rect&color=0:FFC400,50:E53935,100:1D4ED8&height=4&section=header"/></div>
 
@@ -106,7 +105,6 @@ It goes well beyond a product page: browse **50+ products**, pick a pack size, a
 
 It's built with plain **HTML, CSS and JavaScript** — no frameworks, no build step.
 
-> ⚠️ A front-end demo made for educational purposes — payments are simulated and accounts are not secure.
 
 </td>
 <td width="40%" valign="top">
@@ -413,7 +411,7 @@ This is a **front-end demo built for educational purposes**.
 <a href="mailto:shahrishu1515@gmail.com"><img src="https://img.shields.io/badge/Email-E53935?style=for-the-badge&logo=gmail&logoColor=white"/></a>
 <a href="https://github.com/shahrishabh1513-jsk"><img src="https://img.shields.io/badge/GitHub-0B1E5B?style=for-the-badge&logo=github&logoColor=white"/></a>
 
-<br/><br/>
+<br/>
 
 ### ⭐ If you like this project, give it a star — it helps a lot!
 
