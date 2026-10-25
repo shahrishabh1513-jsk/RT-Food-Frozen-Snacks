@@ -1,3 +1,4 @@
+/* Generic forms (export enquiry, contact, careers) → saved locally in 'inbox' + success note */
 document.addEventListener('DOMContentLoaded', () => {
   RT.$$('form[data-form]').forEach(form => {
     const note = form.querySelector('.note'), kind = form.dataset.form; let file = null;

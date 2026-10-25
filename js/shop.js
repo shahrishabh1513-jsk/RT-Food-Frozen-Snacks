@@ -1,9 +1,17 @@
+/* ============================================================
+   RT FOOD — shared product card + filters (home, products, order)
+   ============================================================ */
 RT.IMG_OVERRIDE = {};   // e.g. { 'french-fries': 'assets/image/my-fries.jpg' }  → own photo per product
+RT.imgSrc = p => RT.IMG_OVERRIDE[p.id] || 'assets/image/' + encodeURIComponent(p.img);
+RT.imgFallback = (el, id) => {   // if a product photo is missing, show the category photo instead
+  const p = RT.PRODUCTS.find(x => x.id === id); el.onerror = null; el.src = 'assets/image/' + encodeURIComponent(p.photo);
+  el.style.objectPosition = p.pos; el.style.transformOrigin = p.pos; el.style.setProperty('--z', p.zoom);
+};
 RT.productCard = (p, size = '500g', i = 0) => {
   if (!p.sizes.includes(size)) size = p.sizes.includes('500g') ? '500g' : p.sizes[0];
-  const cat = RT.CATS.find(c => c.id === p.cat), img = RT.IMG_OVERRIDE[p.id] || 'assets/image/' + p.photo;
+  const cat = RT.CATS.find(c => c.id === p.cat), img = RT.imgSrc(p);
   return `<article class="pcard" data-pid="${p.id}" data-size="${size}" style="animation-delay:${Math.min(i, 12) * 45}ms">
-    <div class="pimg">${p.tag ? `<span class="tag">${p.tag}</span>` : ''}<img src="${img}" alt="${p.name}" loading="lazy" style="object-position:${p.pos};transform-origin:${p.pos};--z:${p.zoom}"><span class="em">${p.icon}</span></div>
+    <div class="pimg">${p.tag ? `<span class="tag">${p.tag}</span>` : ''}<img src="${img}" alt="${p.name}" loading="lazy" style="object-position:center;--z:1" onerror="RT.imgFallback(this,'${p.id}')"><span class="em">${p.icon}</span></div>
     <div class="pbody"><small>${cat.label}</small><h3>${p.name}</h3><p>${p.desc}</p>
       <div class="sizes">${p.sizes.map(s => `<button type="button" data-size="${s}" class="${s === size ? 'on' : ''}">${s}</button>`).join('')}</div>
       <div class="prow"><span class="price">${RT.rupee(RT.price(p, size))}</span><small>+ GST at checkout</small></div>

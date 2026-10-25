@@ -1,82 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recipes | RT FOOD – Frozen Snacks &amp; French Fries</title>
-    <meta name="description"
-        content="33 easy RT FOOD recipes with videos. Watch, then download a printable PDF recipe card with ingredients and cooking steps.">
-    <meta name="theme-color" content="#FFC400">
-    <link rel="icon" type="image/png" href="assets/image/favicon.png">
-    <link rel="stylesheet" href="css/style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Recipes | RT FOOD – Frozen Snacks &amp; French Fries</title>
+<meta name="description" content="33 easy RT FOOD recipes with videos. Watch, then download a printable PDF recipe card with ingredients and cooking steps.">
+<meta name="theme-color" content="#FFC400">
+<link rel="icon" type="image/png" href="assets/image/favicon.png">
+<link rel="stylesheet" href="css/style.css">
 
 </head>
-
 <body class="">
 
 
-    <div id="progress"></div>
+<div id="progress"></div>
 
-    <div id="site-header"></div>
+<div id="site-header"></div>
 
-    <section class="page-hero"><span class="floaty" style="left:6%;top:30%;animation-delay:0s">🍔</span><span
-            class="floaty" style="left:88%;top:22%;animation-delay:-2s">🍳</span><span class="floaty"
-            style="left:76%;top:70%;animation-delay:-4s">🌮</span>
-        <div class="wrap">
-            <div class="crumbs"><a href="index.html">Home</a> / Recipes</div>
-            <h1>Easy &amp; <span class="hl" style="background:linear-gradient(transparent 62%,#fff 62%)">fun
-                    recipes</span></h1>
-            <p>Watch the video, download the recipe card, and cook it at home.</p>
-        </div>
-        <div class="wave"><svg viewBox="0 0 1440 50" preserveAspectRatio="none">
-                <path fill="#FFF9E3" d="M0 30 C240 60 480 0 720 25 C960 50 1200 10 1440 30 L1440 50 L0 50Z" />
-            </svg></div>
-    </section>
-    <section style="padding-top:50px">
-        <div class="wrap">
-            <div class="toolbar">
-                <div class="field" style="flex:2"><label for="rQ">Search recipes</label><input id="rQ"
-                        placeholder="🔍  Burger, chaat, poppers…"></div>
-                <div class="field"><label for="rCat">Recipe type</label><select id="rCat"></select></div><span
-                    class="count" id="rcount"></span>
-            </div>
-            <div class="vgrid" id="vgrid"></div>
-        </div>
-    </section>
-    <div class="modal" id="modal" role="dialog" aria-modal="true">
-        <div class="mbox"><button class="mclose" id="mclose" aria-label="Close">✕</button>
-            <div class="mvid" id="mvid"></div>
-            <div class="mhead">
-                <div>
-                    <h2 id="mtitle"></h2><small id="mmeta" style="color:var(--mute)"></small>
-                </div>
-                <div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn btn-y btn-sm" id="mpdf"
-                        style="box-shadow:none">⬇ Download PDF recipe</button><a class="btn btn-line btn-sm" id="myt"
-                        target="_blank" rel="noopener">Open on YouTube</a></div>
-            </div>
-            <div class="mtext">
-                <div>
-                    <h4>🧂 Ingredients</h4>
-                    <ul id="ming"></ul>
-                </div>
-                <div>
-                    <h4>👩‍🍳 Cooking process</h4>
-                    <ol id="mstep"></ol>
-                </div>
-            </div>
-        </div>
-    </div>
+<section class="page-hero"><span class="floaty" style="left:6%;top:30%;animation-delay:0s">🍔</span><span class="floaty" style="left:88%;top:22%;animation-delay:-2s">🍳</span><span class="floaty" style="left:76%;top:70%;animation-delay:-4s">🌮</span><div class="wrap"><div class="crumbs"><a href="index.html">Home</a> / Recipes</div><h1>Easy &amp; <span class="hl" style="background:linear-gradient(transparent 62%,#fff 62%)">fun recipes</span></h1><p>Watch the video, download the recipe card, and cook it at home.</p></div><div class="wave"><svg viewBox="0 0 1440 50" preserveAspectRatio="none"><path fill="#FFF9E3" d="M0 30 C240 60 480 0 720 25 C960 50 1200 10 1440 30 L1440 50 L0 50Z"/></svg></div></section>
+<section style="padding-top:50px"><div class="wrap"><div class="toolbar"><div class="field" style="flex:2"><label for="rQ">Search recipes</label><input id="rQ" placeholder="🔍  Burger, chaat, poppers…"></div><div class="field"><label for="rCat">Recipe type</label><select id="rCat"></select></div><span class="count" id="rcount"></span></div><div class="vgrid" id="vgrid"></div></div></section>
+<div class="modal" id="modal" role="dialog" aria-modal="true"><div class="mbox"><button class="mclose" id="mclose" aria-label="Close">✕</button><div class="mvid" id="mvid"></div>
+<div class="mhead"><div><h2 id="mtitle"></h2><small id="mmeta" style="color:var(--mute)"></small></div><div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn btn-y btn-sm" id="mpdf" style="box-shadow:none">⬇ Download PDF recipe</button><a class="btn btn-line btn-sm" id="myt" target="_blank" rel="noopener">Open on YouTube</a></div></div>
+<div class="mtext"><div><h4>🧂 Ingredients</h4><ul id="ming"></ul></div><div><h4>👩‍🍳 Cooking process</h4><ol id="mstep"></ol></div></div></div></div>
 
 
-    <div id="site-footer"></div>
+<div id="site-footer"></div>
 
-    <script src="js/data.js"></script>
-    <script src="js/logo.js"></script>
-    <script src="js/main.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="js/pdf.js"></script>
-    <script src="js/recipes.js"></script>
+<script src="js/data.js"></script>
+<script src="js/logo.js"></script>
+<script src="js/main.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="js/pdf.js"></script>
+<script src="js/recipes.js"></script>
 </body>
-
 </html>

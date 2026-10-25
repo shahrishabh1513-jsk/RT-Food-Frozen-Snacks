@@ -1,3 +1,4 @@
+/* Products page — dropdown filters (category, pack size, type, sort) + live search */
 document.addEventListener('DOMContentLoaded', () => {
   const $ = RT.$, grid = $('#pgrid'), f = { q: '', cat: 'all', tag: 'all', size: 'all', sort: 'pop' };
   $('#fCat').innerHTML = RT.catOptions();

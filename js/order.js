@@ -1,3 +1,8 @@
+/* ============================================================
+   RT FOOD — Order flow
+   start → login/signup → menu → cart → details → payment → bill → live tracking
+   Everything persists in localStorage and syncs across tabs.
+   ============================================================ */
 document.addEventListener('DOMContentLoaded', () => {
   const $ = RT.$, $$ = RT.$$, R = RT.rupee, S = RT.store;
   const TRACK = { confirm: 10, pack: 28, pick: 42, ride: 100 };       // seconds — compressed demo timeline (edit freely)
@@ -6,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const VIEWS = ['start', 'auth', 'menu', 'cart', 'details', 'pay', 'bill', 'track'];
   let timer = null, qrTimer = null, draftId = null, payMethod = 'upi', authMode = 'login';
   const user = () => S.get('user', null), orders = () => S.get('orders', []);
-  const imgOf = p => 'assets/image/' + (RT.IMG_OVERRIDE[p.id] ? RT.IMG_OVERRIDE[p.id].replace('assets/image/', '') : p.photo);
+  const imgOf = p => RT.imgSrc(p);
 
   /* ---------- routing ---------- */
   const go = h => { location.hash = h; };
@@ -70,7 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   function rCart() {
     const t = RT.cart.totals(S.get('coupon', null)); if (S.get('coupon') && !t.coupon) { S.del('coupon'); couponMsg('Coupon no longer applies to this cart.', false); }
-    $('#cartList').innerHTML = t.lines.length ? t.lines.map(l => `<div class="crow" data-pid="${l.pid}" data-size="${l.size}"><img src="${imgOf(l.p)}" alt=""><div><b>${l.p.name}</b><br><small>${l.size} · ${R(l.unit)} each</small><div class="qty"><button data-q="-1">−</button><span>${l.qty}</span><button data-q="1">+</button></div></div><div><b>${R(l.total)}</b><button class="rm" data-rm>Remove</button></div></div>`).join('')
+    $('#cartList').innerHTML = t.lines.length ? t.lines.map(l => `<div class="crow" data-pid="${l.pid}" data-size="${l.size}"><img src="${imgOf(l.p)}" alt="" onerror="RT.imgFallback(this,'${l.p.id}')"><div><b>${l.p.name}</b><br><small>${l.size} · ${R(l.unit)} each</small><div class="qty"><button data-q="-1">−</button><span>${l.qty}</span><button data-q="1">+</button></div></div><div><b>${R(l.total)}</b><button class="rm" data-rm>Remove</button></div></div>`).join('')
       : '<div class="empty"><b>🛒</b>Your cart is empty.<br><a class="btn btn-y mt" href="#menu">Browse the menu</a></div>';
     summary(t, '#cartSum'); $('#toDetails').disabled = !t.lines.length; $('#cpList').innerHTML = Object.entries(RT.COUPONS).map(([k, v]) => `<button type="button" title="${v.label}" data-cp="${k}">${k}</button>`).join('');
   }
