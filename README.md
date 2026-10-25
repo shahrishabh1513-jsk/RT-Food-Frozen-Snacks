@@ -121,13 +121,7 @@ It's built with plain **HTML, CSS and JavaScript** — no frameworks, no build s
 </tr>
 </table>
 
-<div align="center">
 
-<img src="https://shahrishabh1513-jsk.github.io/RT-Food-Frozen-Snacks/assets/image/french_fries.png" width="260" alt="Golden crinkle fries served on a plate"/>
-&nbsp;&nbsp;&nbsp;&nbsp;
-<img src="https://shahrishabh1513-jsk.github.io/RT-Food-Frozen-Snacks/assets/image/potato_chef.png" width="200" alt="RT FOOD potato chef mascot"/>
-
-</div>
 
 <div align="center"><img src="https://capsule-render.vercel.app/api?type=rect&color=0:1D4ED8,50:E53935,100:FFC400&height=4&section=header"/></div>
 
